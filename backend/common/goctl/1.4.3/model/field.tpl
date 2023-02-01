@@ -1,0 +1,1 @@
+{{.name}} {{if eq .name "DeleteTiime"}}soft_delete.DeletedAt{{else if eq .name "CreateTime"}}int64{{else if eq .name "UpdateTime"}}int64{{else}}{{.type}}{{end}} {{.tag}} {{if .hasComment}}// {{.comment}}{{end}}
