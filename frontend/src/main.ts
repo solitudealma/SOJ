@@ -4,10 +4,14 @@ import App from '@/App.vue'
 import ElementPlus from 'element-plus'
 
 import router from '@/router'
+import { setupStore } from '@/pinia'
 
 async function bootstrap() {
     const app = createApp(App);
-    app.use(ElementPlus, { size: 'small', zIndex: 3000 }).use(router).mount('#app')
+
+    setupStore(app);
+
+    app.use(ElementPlus).use(router).mount('#app')
 }
 
 bootstrap()

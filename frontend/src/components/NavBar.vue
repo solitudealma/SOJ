@@ -12,7 +12,6 @@
     <el-sub-menu index="/about">
         <template #title>About</template>
         <el-menu-item index="/judgeinfo">JudgeInfo</el-menu-item>
-        <el-menu-item index="2-2">item two</el-menu-item>
     </el-sub-menu>
     <div class="flex-grow" />
   </el-menu>
