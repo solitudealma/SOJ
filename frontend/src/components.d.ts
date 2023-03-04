@@ -39,6 +39,8 @@ declare module '@vue/runtime-core' {
     FooterBar: typeof import('./components/FooterBar.vue')['default']
     IEpBack: typeof import('~icons/ep/back')['default']
     IEpEdit: typeof import('~icons/ep/edit')['default']
+    IEpEditPen: typeof import('~icons/ep/edit-pen')['default']
+    IEpMedal: typeof import('~icons/ep/medal')['default']
     NavBar: typeof import('./components/NavBar.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
