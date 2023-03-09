@@ -1,0 +1,46 @@
+syntax = "v1"
+
+info(
+	title: "用户服务"
+	desc: "用户服务"
+	author: "SolitudeAlma"
+	email: "2241141629yt@gmail.com"
+	version: "v1"
+)
+
+import (
+	"user/user.api"
+)
+
+//no need login
+@server(
+	prefix: api/v1
+	group: user
+)
+service user {
+	
+	@doc "user register"
+	@handler register
+	post /user/register (RegisterReq) returns (RegisterResp)
+	
+	@doc "user login"
+	@handler login
+	post /user/login (LoginReq) returns (LoginResp)
+}
+
+//need login
+@server(
+	prefix: api/v1
+	group: user
+	middleware: Auth
+)
+service user {
+	
+	@doc "user logout"
+	@handler logout
+	post /user/logout (LogoutReq) returns (LogoutResp)
+	
+	@doc "get user info"
+	@handler getUserInfo
+	get /user/info (GetUserInfoReq) returns (GetUserInfoResp)
+}

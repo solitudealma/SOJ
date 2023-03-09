@@ -1,0 +1,25 @@
+Name: user
+Host: 0.0.0.0
+Port: 8888
+
+Auth:
+  AccessSecret: ae05asd36asdf9-645das0-4606-8e13-5a1asd505da0
+  AccessExpire: 604800
+  BufferTime: 86400
+
+MySQL:
+  DSN: root:123456@tcp(127.0.0.1:3306)/soj?charset=utf8mb4&parseTime=True&loc=Asia%2FShanghai
+  LogLevel: 4
+
+Redis:
+  Host: 127.0.0.1:6379
+  Type: node
+  Pass: "123456"
+
+Cache:
+  - Host: 127.0.0.1:6379
+    Pass: "123456"
+
+Log:
+  ServiceName: user-api
+  Level: info

@@ -1,29 +1,27 @@
 import { defineStore } from 'pinia'
 import { store } from '@/pinia';
-import type { ModalStatus } from '#/store'
+import type { DialogStatus } from '#/store'
 
 interface GlobalState {
-    modalStatus: {
-        mode: string 
-        visible: boolean
-    }
+    dialogStatus: DialogStatus
 }
 
 export const useGlobalStore = defineStore('global', {
     state: (): GlobalState => ({
-        modalStatus: {
-            mode: 'LoginComponent',
+        dialogStatus: {
+            mode: 'Login',
             visible: false,
         }
     }),
     getters: {},
     actions: {
-        changeModalStatus(modalStatus: ModalStatus) {
-            if (modalStatus.mode !== undefined) {
-                this.modalStatus.mode = modalStatus.mode
+        changeDialogStatus(dialogStatus: DialogStatus) {
+            console.log(dialogStatus)
+            if (dialogStatus.mode !== undefined) {
+                this.dialogStatus.mode = dialogStatus.mode
             }
-            if (modalStatus.visible !== undefined) {
-                this.modalStatus.visible = modalStatus.visible
+            if (dialogStatus.visible !== undefined) {
+                this.dialogStatus.visible = dialogStatus.visible
             }
         },
     },

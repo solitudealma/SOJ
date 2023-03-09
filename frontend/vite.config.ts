@@ -59,10 +59,9 @@ export default ({ command, mode }: ConfigEnv): UserConfigExport => {
       port: 8000,
       proxy: {
         "/api": {
-          target: "127.0.0.1:8888",
+          target: "http://127.0.0.1:8888",
           changeOrigin: true,
-          secure: false,
-          rewrite: (path) => path.replace("", "/"),
+          rewrite: (path) => path.replace("/^\/api", ""),
         },
       },
     },

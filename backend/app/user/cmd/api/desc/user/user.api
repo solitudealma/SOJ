@@ -1,0 +1,52 @@
+syntax = "v1"
+
+info(
+	title: "用户实例"
+	desc: "用户实例"
+	author: "SolitudeAlma"
+	email: "2241141629yt@gmail.com"
+)
+
+type UserInfo {
+	Id       int64  `json:"userId"`
+    Username string `json:"username"`
+	Avatar   string `json:"avatar"`
+}
+
+type (
+	RegisterReq {
+        Username            string  `json:"username" validate:"required,lte=16,gte=4"`
+        Password            string  `json:"password" validate:"required,gte=6,lte=20"`
+        PasswordConfirmed   string  `json:"passwordConfirmed" validate:"required,eqfield=Password"`
+    }
+	RegisterResp {
+	}
+)
+
+type (
+	LoginReq {
+		Username string `json:"username" validate:"required"`
+		Password string `json:"password" validate:"required"`
+	}
+	LoginResp {
+		Token  string `json:"token"`
+        UserInfo    UserInfo  `json:"userInfo"`
+	}
+)
+
+type (
+    LogoutReq {
+        Token   string  `header:"token" validate:"required"`
+    }
+    LogoutResp {
+    }
+)
+
+type (
+	GetUserInfoReq {
+	    Token   string `header:"token" validate:"required"`
+    }
+	GetUserInfoResp {
+		UserInfo UserInfo `json:"userInfo"`
+	}
+)

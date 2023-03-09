@@ -1,10 +1,5 @@
 <template>
-  <el-menu
-    :default-active="activeRoute"
-    class="el-menu-demo"
-    router
-    mode="horizontal"
-  >
+  <el-menu :default-active="activeRoute" router mode="horizontal" :ellipsis="false">
     <div class="logo">SOJ</div>
     <el-menu-item index="/">Home</el-menu-item>
     <el-menu-item index="/problem">Problem</el-menu-item>
@@ -15,14 +10,7 @@
     </el-sub-menu>
     <div class="flex-grow" />
     <div class="btn-menu" v-if="!isAuthenticated">
-      <el-popover
-        placement="bottom"
-        transition="fade-in-linear"
-        title=""
-        width="200"
-        trigger="hover"
-        content=""
-      >
+      <el-popover placement="bottom" transition="fade-in-linear" width="200" trigger="hover">
         <span>登录后你可以:</span>
         <br />
         <br />
@@ -40,225 +28,111 @@
         </span>
         <br /><br />
         <!-- LoginForm -->
-        <a class="login-btn" @click="loginDialogFormVisible = true">Login</a>
-        <template>
-          <el-dialog
-            title="登录"
-            @close="loginDialogReset(formLoginRef)"
-            v-model="loginDialogFormVisible"
-            :append-to-body="true"
-            :modal="true"
-            width="30%"
-            close-on-press-escape
-            :destroy-on-close="true"
-            center
-          >
-            <el-form :model="formLogin" :rules="ruleLogin" ref="formLoginRef">
-              <el-form-item
-                label="账号"
-                :label-width="formLabelWidth"
-                prop="username"
-              >
-                <el-input
-                  placeholder="请输入账号"
-                  v-model="formLogin.username"
-                  autocomplete="off"
-                ></el-input>
-              </el-form-item>
-              <el-form-item
-                label="密码"
-                :label-width="formLabelWidth"
-                prop="password"
-              >
-                <el-input
-                  placeholder="请输入密码"
-                  v-model="formLogin.password"
-                  show-password
-                ></el-input>
-              </el-form-item>
-            </el-form>
-            <template #footer>
-              <el-button @click="loginDialogFormVisible = false"
-                >取 消
-              </el-button>
-              <el-button type="primary" @click="handleLogin(formLoginRef)"
-                >确 定
-              </el-button>
-            </template>
-          </el-dialog>
-        </template>
+        <a class="login-btn" @click="handleBtnClick('Login')">Login</a>
         <!-- LoginForm -->
         <br />
         <span style="position: relative; left: 30px">首次使用?</span>
         <!-- RegisterForm -->
-        <a class="register-btn" @click="registerDialogFormVisible = true">
+        <a class="register-btn" @click="handleBtnClick('Register')">
           点我注册
         </a>
-        <template>
-          <el-dialog
-            title="注册"
-            v-model="registerDialogFormVisible"
-            :append-to-body="true"
-            width="30%"
-            close-on-press-escape
-            :destroy-on-close="true"
-            center
-          >
-            <el-form :model="formRegister">
-              <el-form-item label="账号" :label-width="formLabelWidth">
-                <el-input
-                  placeholder="请输入账号"
-                  v-model="formRegister.username"
-                  autocomplete="off"
-                ></el-input>
-              </el-form-item>
-              <el-form-item label="密码" :label-width="formLabelWidth">
-                <el-input
-                  placeholder="请输入密码"
-                  v-model="formRegister.password"
-                  show-password
-                ></el-input>
-              </el-form-item>
-            </el-form>
-            <template #footer>
-              <el-button @click="registerDialogFormVisible = false"
-                >取 消
-              </el-button>
-              <el-button
-                type="primary"
-                @click="registerDialogFormVisible = true"
-                >确 定
-              </el-button>
-            </template>
-          </el-dialog>
-        </template>
-        <!-- RegisterForm -->
         <template #reference>
           <el-button type="primary">登录</el-button>
         </template>
       </el-popover>
     </div>
     <template v-else>
-      <el-dropdown size="medium" class="drop-menu" @command="handleCommand">
-        <a style="text-decoration: none">
-          <el-avatar
-            class="header-img"
-            :size="40"
-            :src="myHeader"
-            :alt="avatarAlt"
-          >
-          </el-avatar>
+      <el-avatar class="header-img" :size="40" :src="userInfo.avatar" :alt="avatarAlt">
+      </el-avatar>
+      <el-dropdown class="drop-menu" :teleported="false" @command="handleCommand">
+        <a style="text-decoration: none;">
           <strong id="id_user_username">
-            {{ user.username }}
-            <i class="fa fa-caret-down"></i>
+            {{ userInfo.username }}
+            <el-icon>
+              <IEpArrowDown />
+            </el-icon>
           </strong>
         </a>
-        <el-dropdown-menu slot="dropdown" class="dropdown-menu">
-          <el-dropdown-item command="mySpace">我的空间</el-dropdown-item>
-          <el-dropdown-item command="info">个人信息</el-dropdown-item>
-          <el-dropdown-item command="changePassword">修改密码</el-dropdown-item>
-          <el-dropdown-item :divided="true" command="myTicket"
-            >我的工单
-          </el-dropdown-item>
-          <el-dropdown-item :divided="true" command="logout"
-            >登出
-          </el-dropdown-item>
-        </el-dropdown-menu>
+        <template #dropdown>
+          <el-dropdown-menu class="dropdown-menu">
+            <el-dropdown-item command="mySpace">我的空间</el-dropdown-item>
+            <el-dropdown-item command="info">个人信息</el-dropdown-item>
+            <el-dropdown-item command="changePassword">修改密码
+            </el-dropdown-item>
+            <el-dropdown-item :divided="true" command="myTicket">我的工单
+            </el-dropdown-item>
+            <el-dropdown-item :divided="true" command="logout">登出
+            </el-dropdown-item>
+          </el-dropdown-menu>
+        </template>
       </el-dropdown>
     </template>
   </el-menu>
+  <el-dialog :title="dialogTitle" v-model="dialogVisible" width="20%" :close-on-click-modal="false">
+    <component :is="dialog" v-if="dialogVisible"></component>
+  </el-dialog>
 </template>
 
 <script setup lang="ts">
-import { computed, ref, reactive } from "vue";
-import type { FormInstance, FormRules } from "element-plus";
-import { useRoute } from "vue-router";
+import { computed } from "vue";
+import { RouteLocationRaw, useRoute, useRouter } from "vue-router";
+import { useGlobalStore } from "@/pinia/modules/global";
+import { useUserStore } from "@/pinia/modules/user";
+import Login from "@/components/Login.vue";
+import Register from "@/components/Register.vue";
+import { DialogStatus } from "#/store";
 
 const route = useRoute();
+const router = useRouter();
 const activeRoute = computed(() => route.path);
+const globalStore = useGlobalStore();
+const userStore = useUserStore();
 
-let isAuthenticated = ref(false);
-let loginDialogFormVisible = ref(false);
-let registerDialogFormVisible = ref(false);
-let formLabelWidth = "60px";
-let myHeader = ref(
-  "https://ae01.alicdn.com/kf/Hd60a3f7c06fd47ae85624badd32ce54dv.jpg"
+let isAuthenticated = computed(() => userStore.isAuthenticated);
+let userInfo = computed(() => userStore.userInfo);
+let avatarAlt = computed(() => `${userInfo.value.username}的头像`);
+
+let dialog = shallowRef(Login);
+let dialogVisible = computed({
+  get() {
+    return globalStore.dialogStatus.visible;
+  },
+  set(value) {
+    globalStore.changeDialogStatus({
+      visible: value,
+    } as DialogStatus);
+  },
+});
+let dialogTitle = computed(() =>
+  globalStore.dialogStatus.mode === "Login" ? "登录-SOJ" : "注册-SOJ"
 );
-let avatarAlt = ref("SolitudeAlma的头像");
-let user = ref({
-  username: "",
-});
-const formLoginRef = ref<FormInstance>();
 
-const usernameReg = /^[a-zA-Z0-9_-]{4,16}$/;
-const validateUsername = (rule: any, value: any, callback: any) => {
-  if (!value) {
-    return callback(new Error("用户名不能为空!!"));
+const handleBtnClick = (mode: string) => {
+  if (mode === "Login") {
+    dialog.value = Login;
+  } else if (mode === "Register") {
+    dialog.value = Register;
   }
-  if (!usernameReg.test(value)) {
-    return callback(new Error("格式有误"));
-  } else {
-    return callback();
-  }
+  globalStore.changeDialogStatus({ mode, visible: true });
 };
 
-const formLogin = reactive({
-  username: "",
-  password: "",
-});
+const handleCommand = (route: RouteLocationRaw) => {
+  router.push(route);
+};
 
-const formRegister = reactive({
-  username: "",
-  password: "",
-});
-const ruleLogin = reactive<FormRules>({
-  username: [
-    { required: true, trigger: "blur" },
-    { validator: validateUsername, trigger: "blur" },
-  ],
-  password: [
-    {
-      required: true,
-      message: "请输入6-20位的密码",
-      trigger: "change",
-      min: 6,
-      max: 20,
-    },
-  ],
-});
-
-const handleLogin = (formEl: FormInstance | undefined) => {
-  if (!formEl) return;
-  formEl.validate((valid) => {
-    if (valid) {
-      console.log("submit!");
-    } else {
-      console.log("error submit!");
-      return false;
+watch(
+  () => globalStore.dialogStatus.mode,
+  (value) => {
+    let mode = globalStore.dialogStatus.mode;
+    if (mode === "Login") {
+      dialog.value = Login;
+    } else if (mode === "Register") {
+      dialog.value = Register;
     }
-  });
-};
-
-const loginDialogReset = (formEl: FormInstance | undefined) => {
-  if (!formEl) return;
-  formEl.resetFields();
-};
-
-const handleCommand = (command: string | number | object) => {
-  switch (command) {
-    case "changPassword":
-      break;
-    case "mySpace":
-      break;
-    case "myTicket":
-      break;
-    case "info":
-      break;
-    default:
-      break;
   }
-};
+);
 </script>
+
 <style lang="less" scoped>
 .logo {
   margin-left: 2%;
@@ -267,35 +141,35 @@ const handleCommand = (command: string | number | object) => {
   float: left;
   line-height: 60px;
 }
-
 .btn-menu {
   float: right;
   margin-right: 20px;
   margin-top: 10px;
 }
-
+.header-img {
+  margin: 10px 0 -13px 0;
+}
 .drop-menu {
-  float: right;
-  margin-right: 20px;
-
-  .el-dropdown-menu .dropdown-menu {
+  margin-top: 24px;
+  .dropdown-menu {
+    left: 0;
+    float: left;
     min-width: 160px;
-  }
-
-  .header-img {
-    margin: 10px 0 -13px 0;
+    padding: 5px 0;
+    font-size: 14px;
+    text-align: left;
+    background-color: #fff;
+    background-clip: padding-box;
+    border-radius: 4px;
   }
 }
-
 .flex-grow {
   flex-grow: 1;
 }
-
 .el-popover {
   .btn-menu-icon-trophy {
     margin: 0 0 0 70px;
   }
-
   .login-btn {
     display: block;
     box-sizing: border-box;
@@ -310,7 +184,6 @@ const handleCommand = (command: string | number | object) => {
     border-radius: 2px;
     cursor: pointer;
   }
-
   .register-btn {
     color: #00a1d6;
     position: relative;
@@ -318,33 +191,22 @@ const handleCommand = (command: string | number | object) => {
     cursor: pointer; //鼠标手型
   }
 }
-
-.dropdown-menu {
-  position: absolute;
-  top: 100%;
-  left: 0;
-  float: left;
-  min-width: 160px;
-  padding: 5px 0;
-  margin: 2px 0 0;
-  font-size: 14px;
-  text-align: left;
-  background-color: #fff;
-  background-clip: padding-box;
-  border: 1px solid rgba(0, 0, 0, 0.15);
-  border-radius: 4px;
-}
-
 #id_user_username {
   cursor: pointer;
   color: #909399;
 }
-
 #id_user_username:hover {
   color: #303133;
 }
-
-.el-dialog__body {
-  padding: 0 25px 0;
+:deep(.el-dialog) {
+  border-radius: 10px !important;
+  text-align: center;
+}
+:deep(.el-dialog__header .el-dialog__title) {
+  font-size: 22px;
+  font-weight: 600;
+  font-family: Arial, Helvetica, sans-serif;
+  line-height: 1em;
+  color: #4e4e4e;
 }
 </style>
