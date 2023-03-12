@@ -58,10 +58,15 @@ export default ({ command, mode }: ConfigEnv): UserConfigExport => {
       hmr: true,
       port: 8000,
       proxy: {
-        "/api": {
+        "/api/v1/user": {
           target: "http://127.0.0.1:8888",
           changeOrigin: true,
-          rewrite: (path) => path.replace("/^\/api", ""),
+          rewrite: (path) => path.replace("/^\/api/v1", ""),
+        },
+        "/api/v1/problem": {
+          target: "http://127.0.0.1:8889",
+          changeOrigin: true,
+          rewrite: (path) => path.replace("/^\/api/v1", ""),
         },
       },
     },

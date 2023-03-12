@@ -44,6 +44,7 @@ func (l *RegisterLogic) Register(req *types.RegisterReq) (resp *types.RegisterRe
 
 	user := &model.User{
 		Username: req.Username,
+		Avatar: "https://cdn.acwing.com/media/user/profile/photo/71847_lg_463b89cdb9.jpeg",
 	}
 
 	password, err := tool.GenerateFromPassword(req.Password)

@@ -1,0 +1,38 @@
+syntax = "v1"
+
+info(
+	title: "题目服务"
+	desc: "题目服务"
+	author: "SolitudeAlma"
+	email: "2241141629yt@gmail.com"
+	version: "v1"
+)
+
+import (
+	"problem/problem.api"
+)
+
+//no need login
+@server(
+	prefix: api/v1
+	group: problem
+)
+service problem {
+	
+	@doc "get problem list info by page"
+	@handler getProblemListInfo
+	get /problem (GetProblemListInfoReq) returns (GetProblemListInfoResp)
+	
+	@doc "get problem info by problemId"
+	@handler getProblemInfo
+	get /problem/:problemId (GetProblemInfoReq) returns (GetProblemInfoResp)
+}
+
+//need login
+@server(
+	prefix: api/v1
+	group: problem
+	middleware: Auth
+)
+service problem {
+}

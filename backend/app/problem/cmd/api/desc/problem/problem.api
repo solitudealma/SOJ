@@ -1,0 +1,36 @@
+syntax = "v1"
+
+info(
+	title: "题目实例"
+	desc: "题目实例"
+	author: "SolitudeAlma"
+	email: "2241141629yt@gmail.com"
+)
+
+type Problem {
+	ProblemId   string  `json:"problemId"`
+	Title       string  `json:"title"`
+	PassingRate float64 `json:"passingRate"`
+	Difficulty  int64   `json:"difficulty"`
+	IsAccepted  bool    `json:"isAccepted"`
+}
+
+type (
+	GetProblemListInfoReq {
+		CurrentPage int `form:"currentPage" validate:"required,gte=1"`
+	}
+	GetProblemListInfoResp {
+		Current  int     `json:"current"`
+		Total    int64     `json:"total"`
+		Problems []Problem `json:"problems"`
+	}
+)
+
+type (
+	GetProblemInfoReq {
+		ProblemId string `path:"problemId" validate:"required"`
+	}
+	GetProblemInfoResp {
+		ProblemInfo Problem `json:"problemInfo"`
+	}
+)

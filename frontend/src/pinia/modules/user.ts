@@ -24,14 +24,14 @@ export const useUserStore = defineStore('user', {
     },
     actions: {
         async LogIn(loginInfo: LoginRequest) {
-            const globalStore = useGlobalStore(); 
+            const globalStore = useGlobalStore();
             const res = await login(loginInfo)
-             if (res.code === 200) {
-                 this.setUserInfo(res.data!.userInfo)
-                 this.setToken(res.data!.token)
-                 globalStore.changeDialogStatus({ visible: false} as DialogStatus)
-                 ElMessage.success("欢迎回来～")
-             }
+            if (res.code === 200) {
+                this.setUserInfo(res.data!.userInfo)
+                this.setToken(res.data!.token)
+                globalStore.changeDialogStatus({ visible: false } as DialogStatus)
+                ElMessage.success("欢迎回来～")
+            }
         },
         async GetUserInfo() {
             const res = await getUserInfo()

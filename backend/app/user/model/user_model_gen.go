@@ -9,6 +9,7 @@ import (
 	"github.com/SpectatorNan/gorm-zero/gormc"
 	"github.com/zeromicro/go-zero/core/stores/cache"
 	"gorm.io/gorm"
+	"gorm.io/plugin/soft_delete"
 )
 
 var (
@@ -42,7 +43,7 @@ type (
 		UpdateTime int64 `gorm:"column:update_time;autoUpdateTime"`
 		// 更新时间
 
-		DeleteTime int64 `gorm:"column:delete_time;not null"`
+		DeleteTime soft_delete.DeletedAt `gorm:"column:delete_time;not null"`
 		// 删除时间
 
 		Username string `gorm:"column:username"`
