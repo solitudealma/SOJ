@@ -3,27 +3,38 @@ import { RouteRecordRaw } from 'vue-router'
 const routes: Array<RouteRecordRaw> = [
     {
         path: '/',
-        name: 'home',
+        name: 'Home',
         component: () => import('@/views/general/HomePage.vue'),
     },
     {
         path: '/problem',
-        name: 'problemList',
+        name: 'ProblemList',
         component: () => import('@/views/problem/ProblemList.vue'),
     },
     {
+        path: '/problem/:problemId',
+        name: 'ProblemListItem',
+        component: () => import('@/views/problem/ProblemListItem.vue'),
+    },
+    {
         path: '/solution',
-        name: 'solutionList',
+        name: 'SolutionList',
         component: () => import('@/views/solution/SolutionList.vue'),
     },
     {
         path: '/judgeinfo',
-        name: 'judgeInfo',
+        name: 'JudgeInfo',
         component: () => import('@/views/about/JudgeInfo.vue'),
     },
     {
+        path: '/logout',
+        name: 'Logout',
+        component: () => import('@/views/user/Logout.vue'),
+        meta: { requireAuth: true },
+    },
+    {
         path: '/faq',
-        name: 'faq',
+        name: 'Faq',
         component: () => import('@/views/about/FAQ.vue'),
     },
     {
