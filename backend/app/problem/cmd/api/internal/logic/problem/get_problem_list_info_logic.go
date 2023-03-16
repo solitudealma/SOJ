@@ -7,7 +7,7 @@ import (
 	"github.com/solitudealma/SOJ/backend/app/problem/cmd/api/internal/types"
 	"github.com/solitudealma/SOJ/backend/app/problem/model"
 	"github.com/solitudealma/SOJ/backend/common/xerr"
-	
+
 	"github.com/pkg/errors"
 	"github.com/zeromicro/go-zero/core/logx"
 )
@@ -29,7 +29,7 @@ func NewGetProblemListInfoLogic(ctx context.Context, svcCtx *svc.ServiceContext)
 func (l *GetProblemListInfoLogic) GetProblemListInfo(req *types.GetProblemListInfoReq) (resp *types.GetProblemListInfoResp, err error) {
 
 	list, err := l.svcCtx.ProblemModel.FindPageListByPage(l.ctx, req.CurrentPage, 50, "")
-	if err != nil && !errors.Is(err, model.ErrNotFound) {
+	if err != nil && err != model.ErrNotFound {
 		return nil, errors.Wrapf(xerr.NewErrCode(xerr.DB_ERROR), "GetProblemListInfo failed, page: %d db err: %v", req.CurrentPage, err)
 	}
 
@@ -42,18 +42,18 @@ func (l *GetProblemListInfoLogic) GetProblemListInfo(req *types.GetProblemListIn
 	if len(list) > 0 {
 		for i := range list {
 			var flag bool
-			if i % 2 == 0 {
+			if i%2 == 0 {
 				flag = true
 			} else {
 				flag = false
 			}
 
 			problem := types.Problem{
-				ProblemId: list[i].ProblemId,
-				Title: list[i].Title,
+				ProblemId:   list[i].ProblemId,
+				Title:       list[i].Title,
 				PassingRate: 10.1,
-				Difficulty: list[i].Difficulty,
-				IsAccepted: flag,
+				Difficulty:  list[i].Difficulty,
+				IsAccepted:  flag,
 			}
 
 			problems = append(problems, problem)
@@ -62,7 +62,7 @@ func (l *GetProblemListInfoLogic) GetProblemListInfo(req *types.GetProblemListIn
 
 	return &types.GetProblemListInfoResp{
 		Problems: problems,
-		Current: req.CurrentPage,
-		Total: total,
+		Current:  req.CurrentPage,
+		Total:    total,
 	}, nil
 }

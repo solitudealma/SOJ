@@ -31,7 +31,7 @@ func (l *GetUserInfoLogic) GetUserInfo(req *types.GetUserInfoReq) (resp *types.G
 	userId := tool.GetUserId(l.svcCtx.Config.Auth.AccessSecret, l.ctx)
 
 	user, err := l.svcCtx.UserModel.FindOne(l.ctx, userId)
-	if err != nil && !errors.Is(err, model.ErrNotFound) {
+	if err != nil && err != model.ErrNotFound {
 		return nil, errors.Wrapf(xerr.NewErrCode(xerr.DB_ERROR), "GetUserInfo find user db err , id:%d , err:%v", user.Id, err)
 	}
 
