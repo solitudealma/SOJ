@@ -6,6 +6,9 @@ import IconsResolver from "unplugin-icons/resolver";
 import AutoImport from "unplugin-auto-import/vite";
 import Components from "unplugin-vue-components/vite";
 import { ElementPlusResolver } from "unplugin-vue-components/resolvers";
+import monacoEditorPlugin from "vite-plugin-monaco-editor";
+
+const prefix = `monaco-editor/esm/vs`;
 
 function pathResolve(dir: string) {
   return resolve(process.cwd(), ".", dir);
@@ -16,8 +19,24 @@ export default ({ command, mode }: ConfigEnv): UserConfigExport => {
   const env = loadEnv(mode, process.cwd());
 
   return {
+    build: {
+      rollupOptions: {
+        output: {
+          manualChunks: {
+            jsonWorker: [`${prefix}/language/json/json.worker`],
+            cssWorker: [`${prefix}/language/css/css.worker`],
+            htmlWorker: [`${prefix}/language/html/html.worker`],
+            tsWorker: [`${prefix}/language/typescript/ts.worker`],
+            editorWorker: [`${prefix}/editor/editor.worker`],
+          },
+        },
+      },
+    },
     plugins: [
       vue(),
+      monacoEditorPlugin.default({
+        languageWorkers: ['json', 'editorWorkerService'],
+    }),
       AutoImport({
         imports: ["vue"],
         resolvers: [

@@ -22,18 +22,37 @@ import FooterBar from "@/components/FooterBar.vue";
 
 </script>
 
-<style scoped>
-@media screen and (min-width: 1050px) {
-  .el-main {
-    margin-top: 20px;
-    padding: 0 5%;
+<style lang="less">
+.el-main, .el-footer {
+  margin-top: 20px;
+  padding-right: 15px;
+  padding-left: 15px;
+  margin-right: auto;
+  margin-left: auto;
+}
+
+@media (min-width: 768px) {
+  .el-main, .el-footer {
+    width: 750px;
   }
 }
 
-@media screen and (max-width: 1050px) {
-  .el-main {
-    margin-top: 20px;
-    padding: 0 5px;
+@media (min-width: 992px) {
+  .el-main, .el-footer {
+    width: 900px;
   }
 }
+
+@media (min-width: 1200px) {
+  .el-main, .el-footer {
+    width: 1000px;
+  }
+}
+
+@media (min-width: 1300px) {
+  .el-main, .el-footer {
+    width: 1170px;
+  }
+}
+
 </style>

@@ -9,6 +9,22 @@ type Problem struct {
 	IsAccepted  bool    `json:"isAccepted"`
 }
 
+type ProblemInfo struct {
+	ProblemId           string `json:"problemId"`
+	Title               string `json:"title"`
+	Description         string `json:"description"`
+	Input               string `json:"input"`
+	Output              string `json:"output"`
+	Examples            string `json:"examples"`
+	Difficulty          int64  `json:"difficulty"`
+	TimeLimit           int64  `json:"timeLimit"`
+	MemoryLimit         int64  `json:"memoryLimit"`
+	TotalNumberOfPasses int64  `json:"totalNumberOfPasses"`
+	TotalAttempts       int64  `json:"totalAttempts"`
+	Source              string `json:"source"`
+	Tags                string `json:"tags"`
+}
+
 type GetProblemListInfoReq struct {
 	CurrentPage int `form:"currentPage" validate:"required,gte=1"`
 }
@@ -24,5 +40,5 @@ type GetProblemInfoReq struct {
 }
 
 type GetProblemInfoResp struct {
-	ProblemInfo Problem `json:"problemInfo"`
+	ProblemInfo ProblemInfo `json:"problemInfo"`
 }

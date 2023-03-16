@@ -20,12 +20,15 @@
         <el-table-column prop="problemId" label="#" width="150"></el-table-column>
         <el-table-column prop="title" label="标题" width="600">
           <template #default="scope">
-            <el-link type="primary" :underline="false" @click="pushRouter">{{
+            <el-link type="primary" :underline="false" @click="getProblemDetail(scope.row.problemId)">{{
               scope.row.title
             }}</el-link>
           </template>
         </el-table-column>
         <el-table-column prop="passingRate" label="通过率" width="200">
+          <template #default="scope">
+            {{ scope.row.passingRate + "%" }}
+          </template>
         </el-table-column>
         <el-table-column prop="difficulty" label="难度">
           <template #default="scope">
@@ -47,22 +50,16 @@
 
 <script setup lang="ts">
 import { ref } from "vue";
-import { useRouter, useRoute, LocationQuery, LocationQueryValue } from "vue-router";
+import { useRouter, useRoute } from "vue-router";
 import { Search } from "@element-plus/icons-vue";
 import { getProblemListInfo } from "@/api/problem"
-import { GetProblemListInfoRequest, ProblemInfo } from "@/api/types/problem";
+import { GetProblemListInfoRequest, Problem } from "@/api/types/problem";
 
 const route = useRoute();
 const router = useRouter();
 
 let problemInput = ref("");
-let problemData = ref<Array<ProblemInfo>>([{
-  problemId: "S1000",
-  isAccepted: true,
-  title: "题库",
-  passingRate: 10,
-  difficulty: 2
-}]);
+let problemData = ref<Array<Problem>>([]);
 
 let query = ref({
   currentPage: 1
@@ -81,9 +78,18 @@ onMounted(() => {
 let total = ref(100);
 let limit = ref(50);
 
+const getProblemDetail = (problemId: number) =>{
+  router.push({
+    name: "ProblemListItem",
+    params: {
+      problemId
+    },
+  })
+};
+
 const pushRouter = () => {
   router.push({
-      path: '/problem',
+      name: "ProblemList",
       query: query.value,
   });
 };
