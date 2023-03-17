@@ -74,7 +74,7 @@ func (l *LoginLogic) TokenNext(user *model.User) (token string, err error) {
 		l.svcCtx.Config.Auth.BufferTime,
 		l.svcCtx.Config.Auth.AccessExpire,
 		tool.BaseClaims{
-			Id:       user.Id,
+			UserId:   user.Id,
 			Username: user.Username,
 		},
 	)

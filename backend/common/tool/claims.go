@@ -16,7 +16,7 @@ type CustomClaims struct {
 }
 
 type BaseClaims struct {
-	Id       int64
+	UserId   int64
 	Username string
 }
 
@@ -46,8 +46,8 @@ func GetUserId(signingKey string, ctx context.Context) int64 {
 			return 0
 		}
 
-		return cl.Id
+		return cl.UserId
 	}
 
-	return claims.Id
+	return claims.UserId
 }
