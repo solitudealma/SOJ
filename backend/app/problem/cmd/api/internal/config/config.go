@@ -4,6 +4,7 @@ import (
 	"github.com/solitudealma/SOJ/backend/common/stores/gormx"
 	"github.com/zeromicro/go-zero/core/stores/cache"
 	"github.com/zeromicro/go-zero/rest"
+	"github.com/zeromicro/go-zero/zrpc"
 )
 
 type Config struct {
@@ -19,5 +20,6 @@ type Config struct {
 		Pass string
 		Type string
 	}
-	Cache cache.CacheConf
+	Cache        cache.CacheConf
+	JudgeRpcConf zrpc.RpcClientConf
 }

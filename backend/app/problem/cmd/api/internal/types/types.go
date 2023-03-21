@@ -25,6 +25,16 @@ type ProblemInfo struct {
 	Tags                string `json:"tags"`
 }
 
+type Result struct {
+	ExpectedOutput string `json:"expectedOutput"`
+	Memory         int64  `json:"memory"`
+	Status         string `json:"status"`
+	Stderr         string `json:"stderr"`
+	Time           int64  `json:"time"`
+	UserInput      string `json:"userInput"`
+	UserOutput     string `json:"userOutput"`
+}
+
 type GetProblemListInfoReq struct {
 	CurrentPage int `form:"currentPage" validate:"required,gte=1"`
 }
@@ -41,4 +51,15 @@ type GetProblemInfoReq struct {
 
 type GetProblemInfoResp struct {
 	ProblemInfo ProblemInfo `json:"problemInfo"`
+}
+
+type DebugProblemReq struct {
+	ProblemId string `json:"problemId" validate:"required"`
+	Code      string `json:"code" validate:"required"`
+	Language  string `json:"language" validate:"required"`
+	UserInput string `json:"userInput"`
+}
+
+type DebugProblemResp struct {
+	Result Result `json:"result"`
 }

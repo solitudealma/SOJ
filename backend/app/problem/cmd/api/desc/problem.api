@@ -35,4 +35,8 @@ service problem {
 	middleware: Auth
 )
 service problem {
+	
+	@doc "submit the problem"
+	@handler debugProblem
+	post /problem/debug (DebugProblemReq) returns (DebugProblemResp)
 }

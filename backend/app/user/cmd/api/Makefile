@@ -4,7 +4,7 @@ api-gen:
 
 ########## rpc ##########
 rpc-gen:
-	goctl rpc protoc *.protoc --go_out=. --go-grpc_out=.  --zrpc_out=. --home ../../../../common/goctl --style=go_zero
+	goctl rpc protoc *.proto --go_out=. --go-grpc_out=.  --zrpc_out=. --home ../../../../common/goctl --style=go_zero
 
 ########## model ##########
 model-gen:

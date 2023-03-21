@@ -30,7 +30,13 @@ func RegisterHandlers(server *rest.Server, serverCtx *svc.ServiceContext) {
 	server.AddRoutes(
 		rest.WithMiddlewares(
 			[]rest.Middleware{serverCtx.Auth},
-			[]rest.Route{}...,
+			[]rest.Route{
+				{
+					Method:  http.MethodPost,
+					Path:    "/problem/debug",
+					Handler: problem.DebugProblemHandler(serverCtx),
+				},
+			}...,
 		),
 		rest.WithPrefix("/api/v1"),
 	)

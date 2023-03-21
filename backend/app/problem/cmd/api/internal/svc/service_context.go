@@ -2,6 +2,7 @@ package svc
 
 import (
 	"github.com/go-playground/validator/v10"
+	"github.com/solitudealma/SOJ/backend/app/judge/cmd/rpc/judge"
 	"github.com/solitudealma/SOJ/backend/app/problem/cmd/api/internal/config"
 	"github.com/solitudealma/SOJ/backend/app/problem/cmd/api/internal/middleware"
 	"github.com/solitudealma/SOJ/backend/app/problem/model"
@@ -10,6 +11,7 @@ import (
 	"github.com/zeromicro/go-zero/core/logx"
 	"github.com/zeromicro/go-zero/core/stores/redis"
 	"github.com/zeromicro/go-zero/rest"
+	"github.com/zeromicro/go-zero/zrpc"
 
 	"golang.org/x/sync/singleflight"
 )
@@ -22,6 +24,7 @@ type ServiceContext struct {
 	RedisClient *redis.Redis
 
 	ProblemModel model.ProblemModel
+	JudgeRpc     judge.Judge
 }
 
 func NewServiceContext(c config.Config) *ServiceContext {
@@ -46,5 +49,6 @@ func NewServiceContext(c config.Config) *ServiceContext {
 		RedisClient: redisClient,
 
 		ProblemModel: model.NewProblemModel(db, c.Cache),
+		JudgeRpc:     judge.NewJudge(zrpc.MustNewClient(c.JudgeRpcConf)),
 	}
 }

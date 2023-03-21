@@ -1,7 +1,8 @@
 Name: problem
 Host: 0.0.0.0
 Port: 8889
-
+Mode: dev
+Timeout: 10000
 Auth:
   AccessSecret: ae05asd36asdf9-645das0-4606-8e13-5a1asd505da0
   AccessExpire: 604800
@@ -20,6 +21,11 @@ Cache:
   - Host: 127.0.0.1:6379
     Pass: "123456"
 
+JudgeRpcConf:
+  Endpoints:
+    - 127.0.0.1:8080
+  Timeout: 10000
+
 Log:
-  ServiceName: user-api
+  ServiceName: problem-api
   Level: info
