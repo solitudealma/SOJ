@@ -16,7 +16,6 @@ export const useGlobalStore = defineStore('global', {
     getters: {},
     actions: {
         changeDialogStatus(dialogStatus: DialogStatus) {
-            console.log(dialogStatus)
             if (dialogStatus.mode !== undefined) {
                 this.dialogStatus.mode = dialogStatus.mode
             }

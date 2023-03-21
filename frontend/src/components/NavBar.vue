@@ -84,7 +84,9 @@ import { DialogStatus } from "#/store";
 
 const route = useRoute();
 const router = useRouter();
-const activeRoute = computed(() => route.path);
+const activeRoute = computed(() => {
+  return '/' + route.path.split('/')[1];
+});
 const globalStore = useGlobalStore();
 const userStore = useUserStore();
 

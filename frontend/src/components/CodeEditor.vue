@@ -12,7 +12,7 @@
           <IEpRefresh />
         </el-icon>
       </el-button>
-      <el-select v-model='selectLanguageValue' @change='changSelectLangValue' @focus="saveEditorCode" :filterable='true'
+      <el-select v-model='selectLanguageValue' @change='changSelectLangValue' @focus="saveEditorCode"
         style="float: right;margin: 10px;">
         <el-option v-for='item in languagesOptions' :key='item.label' :label='item.label' :value='item.value'>
         </el-option>
@@ -62,7 +62,7 @@
       </el-dialog>
     </div>
     <MonocaEditor v-model:modelValue="codeValue" :theme="theme" width="100%" height="75vh" :language="language"
-      :options="codeEditorOptions" @update:value="codeValue = $event">
+      :options="codeEditorOptions" @update:modelValue="codeValue = $event">
     </MonocaEditor>
     <el-button class='submitBtn' round type='success'><el-icon>
         <IEpUploadFilled />
@@ -73,6 +73,27 @@
       </el-icon>&nbsp; 调试代码
     </el-button>
   </div>
+  <el-card v-if="hasSubmit || hasDebug" class="run-code-status-card" body-style="background-color:#fff">
+    <template #header>
+      <span class="submit-code-status-label">代码运行状态：</span>
+      <span style="color: #5fba7d; font-size: 21px">{{ submitCodeStatus }}</span>
+      <el-button class="close" type="" :text="true" @click="closeRunCodeStatusCard">x</el-button>
+    </template>
+    <label for="run-code-stdin" style="font-size: 15px; font-weight: normal;">输入</label>
+    <el-input id="run-code-stdin" type="textarea" resize="none" :autosize="{ minRows: 1, maxRows: 200 }"
+      v-model="userInput">
+    </el-input>
+    <br />
+    <br />
+    <span class="run-code-stdin-span">输出</span>
+    <pre id="run-code-stdout" style="background-color: #f8f8f8; border-radius: 5px; margin-top: 5px; min-height: 40px;"
+      class="markdown-body">{{ stdOutOrErr }}</pre>
+    <div v-if="hasSubmit" id="run-code-expected-stdout-block" style="margin-top: 20px">
+      <span style="font-weight: normal; font-size: 15px">标准答案</span>
+      <pre id="run-code-expected-stdout" class="markdown-body">{{ expectedOutput }}</pre>
+    </div>
+    <span class="run-code-time">运行时间：{{ runCodeTime }}ms</span>
+  </el-card>
 </template>
   
 <script lang="ts" setup>
@@ -81,6 +102,8 @@ import { useRoute } from 'vue-router';
 import { editor } from 'monaco-editor';
 import MonocaEditor from '@/components/MonocaEditor.vue'
 import { useUserStore } from '@/pinia/modules/user';
+import { debugProblem } from '@/api/problem';
+import { DebugProblemRequest } from '@/api/types/problem';
 import storage from '@/utils/storage';
 
 const route = useRoute();
@@ -88,10 +111,10 @@ const useStore = useUserStore();
 
 let isAuthenticated = computed(() => useStore.isAuthenticated);
 let userInfo = computed(() => useStore.userInfo);
-
+let problemId = computed(() => route.params.problemId);
 let codeValue = ref('');
 let theme = ref('vs-dark');
-let language = ref("javascript");
+let language = ref("cpp");
 let codeEditorOptions = ref<editor.IStandaloneEditorConstructionOptions>({
   tabSize: 4,
 });
@@ -117,9 +140,6 @@ let themesOptions = [{
 }, {
   value: 'hc-black',
   label: 'hc-black'
-}, {
-  value: 'xcode',
-  label: 'Xcode'
 }];
 let selectLanguageValue = ref(language.value)
 let languagesOptions = [{
@@ -141,6 +161,13 @@ let languagesOptions = [{
   value: 'javascript',
   label: 'Javascript'
 }];
+let userInput = ref("");
+let hasSubmit = ref(false);
+let hasDebug = ref(false);
+let submitCodeStatus = ref("");
+let stdOutOrErr = ref("");
+let runCodeTime = ref(0);
+let expectedOutput = ref("");
 
 const refreshCode = () => {
   codeValue.value = ''
@@ -152,9 +179,28 @@ const changSelectLangValue = (value: string) => {
   saveEditorLanguage();
 }
 
-const debuggerCode = () => {
-  let value = codeValue.value;
-  console.log(value);
+const closeRunCodeStatusCard = () => {
+  hasDebug.value = hasSubmit.value = false;
+}
+
+const debuggerCode = async () => {
+  hasDebug.value = true;
+  let req = <DebugProblemRequest>{
+    problemId: problemId.value,
+    code: codeValue.value,
+    language: language.value,
+    userInput: userInput.value,
+  }
+
+  let res = await debugProblem(req)
+  if (res.code === 200) {
+    console.log(res.data!.result)
+    let result = res.data!.result
+    submitCodeStatus.value = result.status === "Accepted" ? "Finished" : result.status;
+    runCodeTime.value = result.time;
+    stdOutOrErr.value = result.stderr !== "" ? result.stderr : result.userOutput;
+    expectedOutput.value = result.expectedOutput;
+  }
 }
 
 const changSelectThemeValue = (value: string) => {
@@ -162,7 +208,6 @@ const changSelectThemeValue = (value: string) => {
 }
 
 const setTabSize = (value: number) => {
-  console.log(typeof value);
   codeEditorOptions.value.tabSize = value
 }
 
@@ -212,18 +257,17 @@ const loadEditorCode = () => {
   if (typeof (localStorage) !== 'undefined') {
     codeValue.value = '';
     let userId = 'anonymous';
-    let problemId = route.params.problemId;
     if (isAuthenticated.value) {
       userId = userInfo.value.userId.toString();
     }
     let language = selectLanguageValue.value;
-    let key = `${problemId}-${userId}-${language}`;
+    let key = `${problemId.value}-${userId}-${language}`;
     let code = storage.get(key);
     if (typeof code === 'string' && code.length > 0) {
       codeValue.value = code;
       hasSetValue = true;
     } else if (userId !== 'anonymous') {
-      let key = `${problemId}-anonymous-${language}`;
+      let key = `${problemId.value}-anonymous-${language}`;
       code = storage.get(key);
       if (typeof code === 'string' && code.length > 0) {
         codeValue.value = code;
@@ -239,13 +283,12 @@ const loadEditorCode = () => {
 const saveEditorCode = () => {
   if (typeof localStorage !== 'undefined') {
     let userId = 'anonymous';
-    let problemId = route.params.problemId;
     if (isAuthenticated.value) {
       userId = userInfo.value.userId.toString()
     }
 
     let language = selectLanguageValue.value;
-    let key = `${problemId}-${userId}-${language}`;
+    let key = `${problemId.value}-${userId}-${language}`;
     let value = codeValue.value;
     storage.set(key, value);
   }
@@ -310,6 +353,77 @@ hr {
 .submitBtn {
   float: right;
   margin: 13px 0 0 0;
+}
+
+pre {
+  display: block;
+  padding: 9.5px;
+  margin: 0 0 10px;
+  font-size: 13px;
+  line-height: 1.42857143;
+  color: #333;
+  word-break: break-all;
+  word-wrap: break-word;
+  background-color: #f5f5f5;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+.run-code-status-card {
+  margin: 75px 0 0 0;
+  background-color: #f5f5f5;
+}
+
+.close {
+  float: right;
+  font-size: 17px;
+  font-weight: 700;
+  line-height: 1;
+  color: #000;
+  text-shadow: 0 1px 0 #fff;
+  filter: alpha(opacity=20);
+  opacity: 0.2;
+  -webkit-appearance: none;
+  padding: 0;
+  cursor: pointer;
+  background: 0 0;
+  border: 0;
+}
+
+.submit-code-status-label {
+  font-size: 18px;
+}
+
+label {
+  display: inline-block;
+  max-width: 100%;
+  margin-bottom: 5px;
+}
+
+span.run-code-stdin-span {
+  font-weight: normal;
+  font-size: 15px;
+}
+
+#run-code-stdin {
+  background-color: rgb(248, 248, 248);
+  color: #555;
+  border-radius: 5px;
+  overflow: hidden;
+}
+
+#run-code-stdout {
+  display: block;
+  overflow-x: auto;
+  padding: 0.5em;
+  background: white;
+  color: black;
+}
+
+#run-code-expected-stdout {
+  background-color: #f8f8f8;
+  border-radius: 5px;
+  margin-top: 5px;
 }
 </style>
   

@@ -2,15 +2,21 @@
   <div class="problem-container">
     <el-card>
       <template #header>
-        <span>题库</span>
-        <el-input v-model="problemInput" placeholder="搜索题号、标题、题目来源、算法、题目描述">
-          <template #append>
-            <el-button :icon="Search" />
-          </template>
-        </el-input>
+        <div>
+          <h2>题库</h2>
+          <el-row>
+            <el-col :xs="{span: 22, push: 1}" :sm="{span: 20, push: 2}" :md="{span: 12, push: 6}" :push="6">
+              <el-input v-model="searchInput" placeholder="搜索题号、标题、题目来源、算法、题目描述">
+              <template #append>
+                <el-button :icon="Search" @click="searchProblem()"/>
+              </template>
+            </el-input>
+            </el-col>
+          </el-row>
+        </div>
       </template>
       <el-table :data="problemData" stripe>
-        <el-table-column prop="isAccepted" label="" width="100">
+        <el-table-column label="" width="100">
           <template #default="scope">
             <el-icon v-if="scope.row.isAccepted" color="green">
               <IEpSelect />
@@ -25,7 +31,7 @@
             }}</el-link>
           </template>
         </el-table-column>
-        <el-table-column prop="passingRate" label="通过率" width="200">
+        <el-table-column prop="passingRate" label="通过率" width="100">
           <template #default="scope">
             {{ scope.row.passingRate + "%" }}
           </template>
@@ -58,9 +64,10 @@ import { GetProblemListInfoRequest, Problem } from "@/api/types/problem";
 const route = useRoute();
 const router = useRouter();
 
-let problemInput = ref("");
+let searchInput = ref("");
 let problemData = ref<Array<Problem>>([]);
-
+let total = ref(100);
+let limit = ref(50);
 let query = ref({
   currentPage: 1
 });
@@ -72,13 +79,10 @@ onMounted(() => {
     query.value.currentPage = 1;
   }
 
-  pullProblemList({currentPage: query.value.currentPage})
+  pullProblemList({ currentPage: query.value.currentPage })
 })
 
-let total = ref(100);
-let limit = ref(50);
-
-const getProblemDetail = (problemId: number) =>{
+const getProblemDetail = (problemId: number) => {
   router.push({
     name: "ProblemListItem",
     params: {
@@ -87,10 +91,14 @@ const getProblemDetail = (problemId: number) =>{
   })
 };
 
+const searchProblem = () => {
+  console.log(searchInput.value)
+}
+
 const pushRouter = () => {
   router.push({
-      name: "ProblemList",
-      query: query.value,
+    name: "ProblemList",
+    query: query.value,
   });
 };
 
@@ -101,8 +109,15 @@ const pullProblemList = async (query: GetProblemListInfoRequest) => {
     total.value = res.data!.total;
   }
 };
-
-
 </script>
 
-<style scoped lang="less"></style>
+<style scoped lang="less">
+h2 {
+  text-align: center;
+  font-size: 36px;
+  font-family: inherit;
+  font-weight: 500;
+  line-height: 1.1;
+  color: inherit;
+}
+</style>

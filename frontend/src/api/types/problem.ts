@@ -22,6 +22,16 @@ export interface ProblemInfo {
 	tags: string;
 }
 
+export interface Result {
+	expectedOutput: string;
+	memory: number;
+	status: string;
+	stderr: string;
+	time: number;
+	userInput: string;
+	userOutput: string;
+}
+
 export interface GetProblemListInfoRequest {
     currentPage: number;
 }
@@ -37,4 +47,15 @@ export interface GetProblemInfoRequest {
 
 export interface GetProblemInfoResponse {
     problemInfo: ProblemInfo;
+}
+
+export interface DebugProblemRequest {
+	problemId: string;
+	code: string;
+	language: string;
+	userInput: string;
+}
+
+export interface DebugProblemResponse {
+	result: Result
 }
