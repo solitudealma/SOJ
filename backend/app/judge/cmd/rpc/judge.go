@@ -4,7 +4,10 @@ import (
 	"flag"
 	"fmt"
 
-	{{.imports}}
+	"github.com/solitudealma/SOJ/backend/app/judge/cmd/rpc/internal/config"
+	"github.com/solitudealma/SOJ/backend/app/judge/cmd/rpc/internal/server"
+	"github.com/solitudealma/SOJ/backend/app/judge/cmd/rpc/internal/svc"
+	"github.com/solitudealma/SOJ/backend/app/judge/cmd/rpc/pb"
 
 	"github.com/zeromicro/go-zero/core/conf"
 	"github.com/zeromicro/go-zero/core/service"
@@ -13,7 +16,7 @@ import (
 	"google.golang.org/grpc/reflection"
 )
 
-var configFile = flag.String("f", "etc/{{.serviceName}}.yaml", "the config file")
+var configFile = flag.String("f", "etc/judge.yaml", "the config file")
 
 func main() {
 	flag.Parse()
@@ -23,8 +26,8 @@ func main() {
 	ctx := svc.NewServiceContext(c)
 
 	s := zrpc.MustNewServer(c.RpcServerConf, func(grpcServer *grpc.Server) {
-{{range .serviceNames}}       {{.Pkg}}.Register{{.Service}}Server(grpcServer, {{.ServerPkg}}.New{{.Service}}Server(ctx))
-{{end}}
+		pb.RegisterJudgeServer(grpcServer, server.NewJudgeServer(ctx))
+
 		if c.Mode == service.DevMode || c.Mode == service.TestMode {
 			reflection.Register(grpcServer)
 		}
