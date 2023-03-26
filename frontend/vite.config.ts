@@ -87,6 +87,16 @@ export default ({ command, mode }: ConfigEnv): UserConfigExport => {
           changeOrigin: true,
           rewrite: (path) => path.replace("/^\/api/v1", ""),
         },
+        "/api/v1/solution": {
+          target: "http://127.0.0.1:8890",
+          changeOrigin: true,
+          rewrite: (path) => path.replace("/^\/api/v1", ""),
+        },
+        "/api/v1/comment": {
+          target: "http://127.0.0.1:8891",
+          changeOrigin: true,
+          rewrite: (path) => path.replace("/^\/api/v1", ""),
+        },
       },
     },
   };

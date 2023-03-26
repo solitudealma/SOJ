@@ -33,7 +33,7 @@
         </el-table-column>
         <el-table-column prop="passingRate" label="通过率" width="100">
           <template #default="scope">
-            {{ scope.row.passingRate + "%" }}
+            {{ scope.row.passingRate.toFixed(2) + "%" }}
           </template>
         </el-table-column>
         <el-table-column prop="difficulty" label="难度">

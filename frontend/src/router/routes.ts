@@ -22,6 +22,11 @@ const routes: Array<RouteRecordRaw> = [
         component: () => import('@/views/solution/SolutionList.vue'),
     },
     {
+        path: '/solution/:solutionId',
+        name: 'SolutionListItem',
+        component: () => import('@/views/solution/SolutionListItem.vue'),
+    },
+    {
         path: '/judgeinfo',
         name: 'JudgeInfo',
         component: () => import('@/views/about/JudgeInfo.vue'),
