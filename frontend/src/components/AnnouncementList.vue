@@ -1,24 +1,10 @@
 <template>
   <el-card>
     <template #header>
-      <div class="clearfix">
-        <span class="title">{{ announcementTitle }}</span>
-        <el-button
-          v-if="listVisible"
-          type="info"
-          plain
-          size="small"
-          class="btn-refresh"
-          >刷新</el-button
-        >
-        <el-button
-          v-else
-          @click="goBack"
-          type="info"
-          plain
-          size="small"
-          class="btn-back"
-        >
+      <div class="card-header">
+        <span>{{ announcementTitle }}</span>
+        <el-button v-if="listVisible" type="info" plain size="small" class="btn-refresh">刷新</el-button>
+        <el-button v-else @click="goBack" type="info" plain size="small" class="btn-back">
           <el-icon size="20">
             <el-icon>
               <IEpBack />
@@ -28,30 +14,20 @@
       </div>
     </template>
     <template v-if="listVisible">
-      <ul class="announcements-container" hoverable>
+      <ul class="announcements-container">
         <li v-for="item in announcementList" :key="item.title">
-          <div class="flex-container" style="text-align: left">
-            <el-row>
-              <el-col :span="14">
-                <a @click="goAnnouncement(item)">{{ item.title }}</a>
-              </el-col>
-              <el-col :span="8">
-                <div>{{ item.date }}</div>
-              </el-col>
-              <el-col :span="2">
-                <div>{{ item.createBy }}</div>
-              </el-col>
-            </el-row>
+          <div class="flex-container">
+            <div class="title">
+              <a class="entry" @click="goAnnouncement(item)">{{ item.title }}</a>
+            </div>
+            <div class="date">{{ item.date }}</div>
+            <div class="creator">{{ item.creator }}</div>
           </div>
         </li>
       </ul>
     </template>
     <template v-else>
-      <div
-        v-html="announcement.content"
-        :key="announcement.title"
-        class="content-container"
-      ></div>
+      <div v-html="announcement.content" :key="announcement.title" class="content-container"></div>
     </template>
   </el-card>
 </template>
@@ -64,21 +40,21 @@ let announcementList = ref([
     title: "各位超级管理员请勿随便修改本站配置",
     date: "2021-8-28 19:54:38",
     link: "https://baidu.com",
-    createBy: "Root",
+    creator: "Root",
     content: "<p>asds</p>",
   },
   {
     title: "qwe",
     date: "2021-8-28 19:54:38",
     link: "https://baidu.com",
-    createBy: "Root",
+    creator: "Root",
     content: "<p>asds</p>",
   },
   {
     title: "qw",
     date: "2021-8-28 19:54:38",
     link: "https://baidu.com",
-    createBy: "Root",
+    creator: "Root",
     content: "<p>asds</p>",
   },
 ]);
@@ -108,44 +84,87 @@ const goAnnouncement = (val) => {
 
 <style scoped lang="less">
 a {
-  color: #495060;
-
-  &:hover {
     color: #2d8cf0;
-    border-bottom: 1px solid #2d8cf0;
-  }
+    background: 0 0;
+    text-decoration: none;
+    outline: 0;
+    cursor: pointer;
+    transition: color .2s ease;
 }
 
-.title {
-  margin-left: 10px;
-  font-size: 17px;
-}
-
-.clearfix:before,
-.clearfix:after {
-  display: table;
-  content: "";
-}
-
-.clearfix:after {
-  clear: both;
+.card-header {
+  font-size: 21px;
+  font-weight: 500;
+  line-height: 30px;
+  padding: 5px 15px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
 
 .announcements-container {
+  margin-top: -10px;
   margin-bottom: 10px;
-  padding-left: 20px !important;
+  padding-left: 0 !important;
 
   li {
+    padding-top: 15px;
     list-style: none;
     padding-bottom: 15px;
+    margin-left: 20px;
     font-size: 16px;
-    border-bottom: 1px solid rgba(187, 187, 187, 0.5);
+    border-bottom: 1px solid hsla(0,0%,73%,.5);
+
+    &:last-child {
+      border-bottom: none;
+    }
+
+    .flex-container {
+      display: flex;
+      width: 100%;
+      max-width: 100%;
+      justify-content: space-around;
+      align-items: flex-start;
+      flex-flow: row nowrap;
+
+      .title {
+        -ms-flex: 1 1;
+        flex: 1 1;
+        text-align: left;
+        padding-left: 10px;
+
+        a.entry {
+          color: #495060;
+        }
+        
+        a.entry:hover {
+          color: #2d8cf0;
+          border-bottom: 1px solid #2d8cf0
+        }
+      }
+
+      .date{
+        -ms-flex: none;
+        flex: none;
+        width: 200px;
+        text-align: center;
+      }
+
+      .creator {
+        -ms-flex: none;
+        flex: none;
+        width: 200px;
+        text-align: center;
+      }
+    }
 
     a {
       cursor: pointer;
     }
   }
 }
+
+.announcements-container li
 
 .btn-refresh,
 .btn-back {
