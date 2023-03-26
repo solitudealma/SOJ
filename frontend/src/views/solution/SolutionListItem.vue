@@ -17,7 +17,7 @@
                 </h3>
                 <div style="color: #999999; font-size:14px;">
                     作者：
-                    <a :href="'/user/space' + solutionData.authorId" target="_self">
+                    <a :href="'/user/space/' + solutionData.authorId" target="_self">
                         <el-avatar class='header-img' :size='24' :src="solutionData.authorAvatar" alt='作者的头像'></el-avatar>
                         &nbsp;
                         <span style="font-size: 18px;">
