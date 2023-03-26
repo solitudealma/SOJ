@@ -32,6 +32,12 @@ const routes: Array<RouteRecordRaw> = [
         component: () => import('@/views/about/JudgeInfo.vue'),
     },
     {
+        path: '/user/space/:userId',
+        name: 'UserSpace',
+        component: () => import('@/views/user/UserSpace.vue'),
+        meta: { requireAuth: true },
+    },
+    {
         path: '/logout',
         name: 'Logout',
         component: () => import('@/views/user/Logout.vue'),

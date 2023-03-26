@@ -46,6 +46,7 @@ func (l *GetSolutionListInfoLogic) GetSolutionListInfo(req *types.GetSolutionLis
 				Title:             list[i].Title,
 				ProblemSource:     list[i].ProblemSource,
 				CreateTime:        list[i].CreateTime,
+				UpdateTime:        list[i].UpdateTime,
 				ProblemDifficulty: list[i].ProblemDifficulty,
 				AuthorId:          list[i].AuthorId,
 				AuthorName:        list[i].AuthorName,

@@ -66,7 +66,7 @@ const router = useRouter();
 
 let searchInput = ref("");
 let problemData = ref<Array<Problem>>([]);
-let total = ref(100);
+let total = ref(50);
 let limit = ref(50);
 let query = ref({
   currentPage: 1

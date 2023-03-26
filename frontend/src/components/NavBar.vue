@@ -56,7 +56,7 @@
         <template #dropdown>
           <el-dropdown-menu class="dropdown-menu">
             <el-dropdown-item command="mySpace">我的空间</el-dropdown-item>
-            <el-dropdown-item command="info">个人信息</el-dropdown-item>
+            <el-dropdown-item command="userInfo">个人信息</el-dropdown-item>
             <el-dropdown-item command="changePassword">修改密码
             </el-dropdown-item>
             <el-dropdown-item :divided="true" command="myTicket">我的工单
@@ -119,7 +119,16 @@ const handleBtnClick = (mode: string) => {
 };
 
 const handleCommand = (route: RouteLocationRaw) => {
-  router.push(route);
+  switch(route) {
+    case 'mySpace':
+      router.push({
+        name: 'UserSpace',
+        params: { userId: userInfo.value.userId },
+      });
+      break;
+    default:
+      break;
+  }
 };
 
 watch(

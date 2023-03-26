@@ -69,7 +69,7 @@ func (m *customSolutionModel) FindPageListByPage(ctx context.Context, page, page
 	var resp []*Solution
 	err := m.QueryNoCacheCtx(ctx, &resp, func(conn *gorm.DB, v interface{}) error {
 		return conn.Model(&Solution{}).
-			Select([]string{"solution_id", "problem_id", "title", "problem_source", "author_name", "author_avatar", "author_id", "create_time", "read", "problem_difficulty"}).
+			Select([]string{"solution_id", "problem_id", "title", "problem_source", "author_name", "author_avatar", "author_id", "create_time", "update_time", "read", "problem_difficulty"}).
 			Offset(offset).Limit(pageSize).
 			Order(orderBy).
 			Find(&resp).Error

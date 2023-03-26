@@ -4,6 +4,7 @@ package types
 type Solution struct {
 	Title             string `json:"title"`
 	CreateTime        int64  `json:"createTime"`
+	UpdateTime        int64  `json:"updateTime"`
 	SolutionId        int64  `json:"solutionId"`
 	ProblemId         string `json:"problemId"`
 	ProblemSource     string `json:"problemSource"`

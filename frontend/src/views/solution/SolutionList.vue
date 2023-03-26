@@ -71,7 +71,7 @@ const router = useRouter();
 
 let solutionData = ref<Array<Solution>>([]);
 let searchInput = ref("");
-let total = ref(100);
+let total = ref(50);
 let limit = ref(50);
 let query = ref({
   currentPage: 1
