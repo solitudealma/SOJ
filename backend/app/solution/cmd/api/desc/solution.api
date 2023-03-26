@@ -1,0 +1,38 @@
+syntax = "v1"
+
+info(
+	title: "题解服务"
+	desc: "题解服务"
+	author: "SolitudeAlma"
+	email: "2241141629yt@gmail.com"
+	version: "v1"
+)
+
+import (
+	"solution/solution.api"
+)
+
+//no need login
+@server(
+	prefix: api/v1
+	group: solution
+)
+service solution {
+	
+	@doc "get solution list info by page"
+	@handler getSolutionListInfo
+	get /solution (GetSolutionListInfoReq) returns (GetSolutionListInfoResp)
+	
+	@doc "get solution info by solutionId"
+	@handler getSolutionInfo
+	get /solution/:solutionId (GetSolutionInfoReq) returns (GetSolutionInfoResp)
+}
+
+//need login
+@server(
+	prefix: api/v1
+	group: solution
+	middleware: Auth
+)
+service solution {
+}

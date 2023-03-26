@@ -2,6 +2,7 @@ package problem
 
 import (
 	"context"
+	"math/rand"
 
 	"github.com/solitudealma/SOJ/backend/app/problem/cmd/api/internal/svc"
 	"github.com/solitudealma/SOJ/backend/app/problem/cmd/api/internal/types"
@@ -51,7 +52,7 @@ func (l *GetProblemListInfoLogic) GetProblemListInfo(req *types.GetProblemListIn
 			problem := types.Problem{
 				ProblemId:   list[i].ProblemId,
 				Title:       list[i].Title,
-				PassingRate: 10.1,
+				PassingRate: rand.Float64()*100 + 1,
 				Difficulty:  list[i].Difficulty,
 				IsAccepted:  flag,
 			}

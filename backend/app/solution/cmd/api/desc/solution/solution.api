@@ -1,0 +1,55 @@
+syntax = "v1"
+
+info(
+	title: "题解实例"
+	desc: "题解实例"
+	author: "SolitudeAlma"
+	email: "2241141629yt@gmail.com"
+)
+
+type Solution {
+	Title   string  `json:"title"`
+	CreateTime int64 `json:"createTime"`
+    SolutionId int64    `json:"solutionId"`
+	ProblemId string `json:"problemId"`
+	ProblemSource string   `json:"problemSource"`
+    AuthorId int64 `json:"authorId"`
+    AuthorName string `json:"authorName"`
+    AuthorAvatar string `json:"authorAvatar"`
+    ProblemDifficulty int64 `json:"problemDifficulty"`
+    Read int64 `json:"read"`
+}
+
+type SolutionInfo {
+	ProblemId string    `json:"problemId"`
+    Title string    `json:"title"`
+    ProblemSource string   `json:"problemSource"`
+    Content string `json:"content"`
+	ProblemLink string  `json:"problemLink"`
+	ProblemDifficulty int64 `json:"problemDifficulty"`
+	UpdateTime int64    `json:"updateTime"`
+    AuthorId int64  `json:"authorId"`
+	AuthorName string   `json:"authorName"`
+    AuthorAvatar string `json:"authorAvatar"`
+	Read int64  `json:"read"`
+}
+
+type (
+	GetSolutionListInfoReq {
+		CurrentPage int `form:"currentPage" validate:"required,gte=1"`
+	}
+	GetSolutionListInfoResp {
+		Current  int     `json:"current"`
+		Total    int64     `json:"total"`
+		Solutions []Solution `json:"solutions"`
+	}
+)
+
+type (
+	GetSolutionInfoReq {
+		SolutionId int64 `path:"solutionId" validate:"required"`
+	}
+	GetSolutionInfoResp {
+		SolutionInfo SolutionInfo `json:"solutionInfo"`
+	}
+)
