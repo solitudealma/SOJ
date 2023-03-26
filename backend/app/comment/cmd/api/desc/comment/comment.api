@@ -1,0 +1,56 @@
+syntax = "v1"
+
+info(
+	title: "评论实例"
+	desc: "评论实例"
+	author: "SolitudeAlma"
+	email: "2241141629yt@gmail.com"
+)
+
+type Comment {
+	CommentId   int64  `json:"commentId"`
+	Layer	int64	`json:"layer"`
+    RootCommentId   int64   `json:"rootCommentId"`
+    ToCommentId int64	`json:"toCommentId"`
+	FromUserId int64 `json:"fromUserId"`
+    FromAvatar string	`json:"fromAvatar"`
+    FromName   string	`json:"fromName"`
+	ToUserId	int64	`json:"toUserId"`
+    ToName	string	`json:"toName"`
+    Content string	`json:"content"`
+	CreateTime int64	`json:"createTime"`
+}
+
+type CommentInfo {
+	SolutionId	int64 `json:"solutionId" validate:"required"`
+	Layer	int64	`json:"layer" validate:"required"`
+    RootCommentId   int64   `json:"rootCommentId"`
+    ToCommentId int64	`json:"toCommentId"`
+	FromUserId int64 `json:"fromUserId" validate:"required"`
+    FromAvatar string	`json:"fromAvatar" validate:"required"`
+    FromName   string	`json:"fromName" validate:"required"`
+	ToUserId	int64	`json:"toUserId"`
+    ToName	string	`json:"toName"`
+    Content string	`json:"content" validate:"required"`
+	CreateTime int64	`json:"createTime" validate:"required"`
+}
+
+type (
+	GetCommentListInfoReq {
+	    solutionId   int64  `form:"solutionId" validate:"required"`
+    }
+	GetCommentListInfoResp {
+		Comments []Comment `json:"comments"`
+		total	int64 `json:"total"`
+	}
+)
+
+type (
+	CreateCommentReq {
+	    Comment   CommentInfo  `json:"comment" validate:"required"`
+    }
+	CreateCommentResp {
+		Comments []Comment `json:"comments"`
+		total	int64 `json:"total"`
+	}
+)

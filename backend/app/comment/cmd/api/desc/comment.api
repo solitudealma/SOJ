@@ -1,0 +1,38 @@
+syntax = "v1"
+
+info(
+	title: "评论服务"
+	desc: "评论服务"
+	author: "SolitudeAlma"
+	email: "2241141629yt@gmail.com"
+	version: "v1"
+)
+
+import (
+	"comment/comment.api"
+)
+
+//no need login
+@server(
+	prefix: api/v1
+	group: comment
+)
+service comment {
+	
+	@doc "get comment list info by solutionId"
+	@handler GetCommentListInfo
+	get /comment (GetCommentListInfoReq) returns (GetCommentListInfoResp)
+}
+
+//need login
+@server(
+	prefix: api/v1
+	group: comment
+	middleware: Auth
+)
+service comment {
+	
+	@doc "create comment by solutionId"
+	@handler CreateComment
+	put /comment (CreateCommentReq) returns (CreateCommentResp);
+}
