@@ -1,7 +1,7 @@
 <template>
     <el-row>
         <el-col :span='6'>
-            <el-card class='box-card' :body-style="{ padding: '15px' }">
+            <el-card :body-style="{ padding: '15px' }">
                 <el-avatar id='my-head-photo' class='img-responsive center-block' :src=userInfo.avatar :size='250'
                     shape='square' alt='我的头像'>
                 </el-avatar>
