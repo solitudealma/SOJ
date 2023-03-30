@@ -5,7 +5,7 @@
         <div>
           <h2>题解</h2>
           <el-row>
-            <el-col :xs="{ span: 22, push: 1}" :sm="{ span: 20, push: 2 }" :md="{ span: 12, push: 6 }">
+            <el-col :xs="{ span: 22, push: 1 }" :sm="{ span: 20, push: 2 }" :md="{ span: 12, push: 6 }">
               <el-input v-model="searchInput" placeholder="搜索题号、标题、题目来源、算法、题目描述">
                 <template #append>
                   <el-button :icon="Search" @click="searchProblem()" />
@@ -15,13 +15,13 @@
           </el-row>
           <br>
           <el-row>
-            <el-col :xs="{ span: 1, push: 22}" :sm="{ span: 1, push: 20 }" :md="{ span: 1, push: 22}">
+            <el-col :xs="{ span: 1, push: 22 }" :sm="{ span: 1, push: 20 }" :md="{ span: 1, push: 22 }">
               <el-button type="primary" size="large">
-            <el-icon>
-              <IEpEdit />
-              </el-icon>
-              写题解
-            </el-button>
+                <el-icon>
+                  <IEpEdit />
+                </el-icon>
+                写题解
+              </el-button>
             </el-col>
           </el-row>
         </div>
@@ -59,12 +59,12 @@
   </div>
 </template>
 <script lang="ts" setup>
-import { ref, onMounted} from "vue";
+import { ref, onMounted } from "vue";
 import { useRouter, useRoute } from "vue-router";
 import { Search } from "@element-plus/icons-vue";
 import { getSolutionListInfo } from "@/api/solution";
-import { Solution, GetSolutionListInfoRequest} from "@/api/types/solution";
-import  time from '@/utils/time'
+import { Solution, GetSolutionListInfoRequest } from "@/api/types/solution";
+import time from '@/utils/time';
 
 const route = useRoute();
 const router = useRouter();
@@ -89,10 +89,15 @@ onMounted(() => {
 
 const searchProblem = () => {
   console.log(searchInput.value)
- }
- 
+}
 
-const getSolutionAuthorDetail = (author: string) => { }
+
+const getSolutionAuthorDetail = (userId: number) => {
+  router.push({
+    name: 'UserSpace',
+    params: { userId },
+  });
+}
 
 const getSolutionDetail = (solutionId: number) => {
   router.push({
