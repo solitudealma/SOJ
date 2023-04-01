@@ -35,4 +35,12 @@ service solution {
 	middleware: Auth
 )
 service solution {
+	
+	@doc "get saved solution info by user"
+	@handler getSavedSolutionInfo
+	get /solution/saved/:authorId (GetSavedSolutionInfoReq) returns (GetSavedSolutionInfoResp)
+	
+	@doc "create solution info by user"
+	@handler createSolutionInfo
+	put /solution (CreateSolutionInfoReq) returns (CreateSolutionInfoResp)
 }

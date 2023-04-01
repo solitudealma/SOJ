@@ -27,13 +27,13 @@ func NewGetSolutionInfoLogic(ctx context.Context, svcCtx *svc.ServiceContext) *G
 }
 
 func (l *GetSolutionInfoLogic) GetSolutionInfo(req *types.GetSolutionInfoReq) (resp *types.GetSolutionInfoResp, err error) {
-	solution, err := l.svcCtx.SolutionModel.FindOneBySolutionId(l.ctx, req.SolutionId)
+	solution, err := l.svcCtx.SolutionModel.FindOne(l.ctx, req.SolutionId)
 	if err != nil && err != model.ErrNotFound {
-		return nil, errors.Wrapf(xerr.NewErrCode(xerr.DB_ERROR), "GetProblemInfo failed, db err: %v", err)
+		return nil, errors.Wrapf(xerr.NewErrCode(xerr.DB_ERROR), "GetSolutionInfo failed, db err: %v", err)
 	}
 
 	if err != nil {
-		return nil, errors.Wrapf(xerr.NewErrMsg("该题目信息不存在"), "can't find the userInfo, err: %v", err)
+		return nil, errors.Wrapf(xerr.NewErrMsg("该题解信息不存在"), "can't find the solutionInfo, err: %v", err)
 	}
 
 	solutionInfo := types.SolutionInfo{

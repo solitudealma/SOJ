@@ -30,7 +30,18 @@ func RegisterHandlers(server *rest.Server, serverCtx *svc.ServiceContext) {
 	server.AddRoutes(
 		rest.WithMiddlewares(
 			[]rest.Middleware{serverCtx.Auth},
-			[]rest.Route{}...,
+			[]rest.Route{
+				{
+					Method:  http.MethodGet,
+					Path:    "/solution/saved/:authorId",
+					Handler: solution.GetSavedSolutionInfoHandler(serverCtx),
+				},
+				{
+					Method:  http.MethodPut,
+					Path:    "/solution",
+					Handler: solution.CreateSolutionInfoHandler(serverCtx),
+				},
+			}...,
 		),
 		rest.WithPrefix("/api/v1"),
 	)

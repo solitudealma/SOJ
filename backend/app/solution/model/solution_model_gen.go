@@ -13,8 +13,7 @@ import (
 )
 
 var (
-	cacheSojSolutionIdPrefix         = "cache:soj:solution:id:"
-	cacheSojSolutionSolutionIdPrefix = "cache:soj:solution:solutionId:"
+	cacheSojSolutionIdPrefix = "cache:soj:solution:id:"
 )
 
 type (
@@ -22,7 +21,6 @@ type (
 		Insert(ctx context.Context, tx *gorm.DB, data *Solution) error
 
 		FindOne(ctx context.Context, id int64) (*Solution, error)
-		FindOneBySolutionId(ctx context.Context, solutionId int64) (*Solution, error)
 		Update(ctx context.Context, tx *gorm.DB, data *Solution) error
 
 		Delete(ctx context.Context, tx *gorm.DB, id int64) error
@@ -43,8 +41,6 @@ type (
 
 		DeleteTime soft_delete.DeletedAt `gorm:"column:delete_time;not null"`
 
-		SolutionId int64 `gorm:"column:solution_id"`
-		// 题解Id
 		ProblemId string `gorm:"column:problem_id"`
 		// 题目Id
 		ProblemSource string `gorm:"column:problem_source"`
@@ -59,12 +55,14 @@ type (
 
 		ProblemDifficulty int64 `gorm:"column:problem_difficulty"`
 		// 题目难度,0简单，1中等，2困难
+		Content string `gorm:"column:content"`
+		// 题解内容
 		ProblemLink string `gorm:"column:problem_link"`
 		// 题目链接
 		Read int64 `gorm:"column:read"`
 		// 阅读量
-		Content string `gorm:"column:content"`
-		// 题解内容
+		Type int64 `gorm:"column:type"`
+		// 0:保存,1:提交
 	}
 )
 
@@ -107,25 +105,6 @@ func (m *defaultSolutionModel) FindOne(ctx context.Context, id int64) (*Solution
 	}
 }
 
-func (m *defaultSolutionModel) FindOneBySolutionId(ctx context.Context, solutionId int64) (*Solution, error) {
-	sojSolutionSolutionIdKey := fmt.Sprintf("%s%v", cacheSojSolutionSolutionIdPrefix, solutionId)
-	var resp Solution
-	err := m.QueryRowIndexCtx(ctx, &resp, sojSolutionSolutionIdKey, m.formatPrimary, func(conn *gorm.DB, v interface{}) (interface{}, error) {
-		if err := conn.Model(&Solution{}).Where("`solution_id` = ?", solutionId).Take(&resp).Error; err != nil {
-			return nil, err
-		}
-		return resp.Id, nil
-	}, m.queryPrimary)
-	switch err {
-	case nil:
-		return &resp, nil
-	case gormc.ErrNotFound:
-		return nil, ErrNotFound
-	default:
-		return nil, err
-	}
-}
-
 func (m *defaultSolutionModel) Update(ctx context.Context, tx *gorm.DB, data *Solution) error {
 	old, err := m.FindOne(ctx, data.Id)
 	if err != nil && err != ErrNotFound {
@@ -146,9 +125,8 @@ func (m *defaultSolutionModel) getCacheKeys(data *Solution) []string {
 		return []string{}
 	}
 	sojSolutionIdKey := fmt.Sprintf("%s%v", cacheSojSolutionIdPrefix, data.Id)
-	sojSolutionSolutionIdKey := fmt.Sprintf("%s%v", cacheSojSolutionSolutionIdPrefix, data.SolutionId)
 	cacheKeys := []string{
-		sojSolutionIdKey, sojSolutionSolutionIdKey,
+		sojSolutionIdKey,
 	}
 	cacheKeys = append(cacheKeys, m.customCacheKeys(data)...)
 	return cacheKeys

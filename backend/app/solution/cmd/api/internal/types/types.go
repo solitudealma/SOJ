@@ -46,3 +46,33 @@ type GetSolutionInfoReq struct {
 type GetSolutionInfoResp struct {
 	SolutionInfo SolutionInfo `json:"solutionInfo"`
 }
+
+type GetSavedSolutionInfoReq struct {
+	AuthorId int64 `path:"authorId" validate:"required"`
+}
+
+type GetSavedSolutionInfoResp struct {
+	ProblemId         string `json:"problemId"`
+	Title             string `json:"title"`
+	ProblemSource     string `json:"problemSource"`
+	Content           string `json:"content"`
+	ProblemLink       string `json:"problemLink"`
+	ProblemDifficulty int64  `json:"problemDifficulty"`
+}
+
+type CreateSolutionInfoReq struct {
+	ProblemId         string `json:"problemId" validate:"required"`
+	Title             string `json:"title" validate:"required"`
+	ProblemSource     string `json:"problemSource" validate:"required"`
+	Content           string `json:"content"`
+	ProblemLink       string `json:"problemLink" validate:"required"`
+	ProblemDifficulty int64  `json:"problemDifficulty" validate:"required"`
+	AuthorId          int64  `json:"authorId" validate:"required"`
+	AuthorName        string `json:"authorName" validate:"required"`
+	AuthorAvatar      string `json:"authorAvatar" validate:"required"`
+	Type              int64  `json:"type" validate:"oneof=0 1"`
+}
+
+type CreateSolutionInfoResp struct {
+	SolutionId int64 `json:"solutionId"`
+}

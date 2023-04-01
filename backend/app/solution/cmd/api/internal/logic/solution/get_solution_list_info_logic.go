@@ -41,7 +41,7 @@ func (l *GetSolutionListInfoLogic) GetSolutionListInfo(req *types.GetSolutionLis
 	if len(list) > 0 {
 		for i := range list {
 			solution := types.Solution{
-				SolutionId:        list[i].SolutionId,
+				SolutionId:        list[i].Id,
 				ProblemId:         list[i].ProblemId,
 				Title:             list[i].Title,
 				ProblemSource:     list[i].ProblemSource,
