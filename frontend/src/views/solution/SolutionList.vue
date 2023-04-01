@@ -16,7 +16,7 @@
           <br>
           <el-row>
             <el-col :xs="{ span: 1, push: 22 }" :sm="{ span: 1, push: 20 }" :md="{ span: 1, push: 22 }">
-              <el-button type="primary" size="large">
+              <el-button type="primary" size="large" @click="getEditeSolutionPage">
                 <el-icon>
                   <IEpEdit />
                 </el-icon>
@@ -47,7 +47,7 @@
         </el-table-column>
         <el-table-column prop="createTime" label="时间" width="170">
           <template #default="scope">
-            {{ time.formatDate(scope.row.createTime) }}
+            {{ time.formatDate(scope.row.createTime * 1000) }}
           </template>
         </el-table-column>
         <el-table-column prop="read" label="阅读"> </el-table-column>
@@ -61,6 +61,8 @@
 <script lang="ts" setup>
 import { ref, onMounted } from "vue";
 import { useRouter, useRoute } from "vue-router";
+import { useUserStore } from "@/pinia/modules/user";
+import { useGlobalStore } from "@/pinia/modules/global";
 import { Search } from "@element-plus/icons-vue";
 import { getSolutionListInfo } from "@/api/solution";
 import { Solution, GetSolutionListInfoRequest } from "@/api/types/solution";
@@ -68,7 +70,10 @@ import time from '@/utils/time';
 
 const route = useRoute();
 const router = useRouter();
+const userStore = useUserStore();
+const globalStore = useGlobalStore();
 
+let isAuthenticated = computed(() => userStore.isAuthenticated);
 let solutionData = ref<Array<Solution>>([]);
 let searchInput = ref("");
 let total = ref(50);
@@ -91,6 +96,20 @@ const searchProblem = () => {
   console.log(searchInput.value)
 }
 
+const getEditeSolutionPage = () => {
+  if(!isAuthenticated) {
+    globalStore.changeDialogStatus({
+      mode: "login",
+      visible: true,
+    });
+
+    return;
+  }
+  
+  router.push({
+    name: "AddSolution",
+  })
+}
 
 const getSolutionAuthorDetail = (userId: number) => {
   router.push({
@@ -107,7 +126,6 @@ const getSolutionDetail = (solutionId: number) => {
     },
   })
 };
-
 
 const pushRouter = () => {
   router.push({

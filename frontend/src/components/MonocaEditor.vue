@@ -84,6 +84,16 @@ let editorOptions: monaco.editor.IStandaloneEditorConstructionOptions = {
     tabCompletion: 'on',
 };
 
+let style = computed(() => {
+    const { width, height } = toRefs(props);
+    const fixedWidth = /(%|px|vw|%)/.test(width.value) ? width.value : width.value + 'vw';
+    const fixedHeight = /(%|px|vh|%)/.test(height.value) ? height.value : height.value + 'vh';
+    return {
+        width: fixedWidth,
+        height: fixedHeight,
+    };
+});
+
 const initEditor = () => {
     if (monacoEditorInstance.value) {
         //实例销毁
@@ -105,15 +115,22 @@ const initEditor = () => {
     emit('editor-mounted', monacoEditorInstance.value);
 };
 
-let style = computed(() => {
-    const { width, height } = toRefs(props);
-    const fixedWidth = /(%|px|vw|%)/.test(width.value) ? width.value : width.value + 'vw';
-    const fixedHeight = /(%|px|vh|%)/.test(height.value) ? height.value : height.value + 'vh';
-    return {
-        width: fixedWidth,
-        height: fixedHeight,
-    };
-});
+const insertText = (text: string, moveCursorToCol: number = 0, moveCursorToLine: number = 0) => {
+    let editor = toRaw(monacoEditorInstance.value)!;
+    const position = editor.getPosition(); // 选择的文本范围或光标的当前位置
+    const { lineNumber, column } = position!
+    // 在光标位置插入文本
+    editor.executeEdits('', [
+        {
+            range: new monaco.Range(lineNumber, column, lineNumber, column),
+            text, // 插入的文本
+            forceMoveMarkers: true,
+        },
+    ]);
+    // 核心 设置光标的位置
+    editor.setPosition({ column: column + text.length + moveCursorToCol, lineNumber: lineNumber + moveCursorToLine});
+    editor.focus() // 插入完文本 需要聚焦下光标
+}
 
 watch(
     () => props.modelValue,
@@ -162,6 +179,10 @@ onMounted(() => {
 onBeforeUnmount(() => {
     toRaw(monacoEditorInstance.value)! && toRaw(monacoEditorInstance.value)!.dispose();
 });
+
+defineExpose({
+    insertText,
+})
 </script>
 
 <style lang="scss" scoped></style>

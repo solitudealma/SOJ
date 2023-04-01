@@ -38,6 +38,12 @@ const routes: Array<RouteRecordRaw> = [
         meta: { requireAuth: true },
     },
     {
+        path: '/user/space/solution/add',
+        name: 'AddSolution',
+        component: () => import('@/views/user/AddSolution.vue'),
+        meta: { requireAuth: true },
+    },
+    {
         path: '/logout',
         name: 'Logout',
         component: () => import('@/views/user/Logout.vue'),

@@ -41,3 +41,33 @@ export interface GetSolutionInfoRequest {
 export interface GetSolutionInfoResponse {
     solutionInfo: SolutionInfo;
 }
+
+export interface GetSavedSolutionInfoRequest {
+    authorId: number;
+}
+
+export interface GetSavedSolutionInfoResponse {
+    problemId: string;
+    title: string;
+    problemSource: string;
+    content: string;
+	problemLink: string;
+	problemDifficulty: number;
+}
+
+export interface CreateSolutionInfoRequest {
+    problemId: string;
+    title: string;
+    problemSource: string;
+    content: string;
+	problemLink: string;
+	problemDifficulty: number;
+    authorId: number;
+	authorName: string;
+    authorAvatar: string;
+    type: number;
+}
+
+export interface CreateSolutionInfoResponse {
+    solutionId: number;
+}

@@ -24,7 +24,7 @@
                             {{ solutionData.authorName }}
                         </span>
                     </a>
-                    , &nbsp;{{ time.formatDate(solutionData.updateTime) }} ,
+                    , &nbsp;{{ time.formatDate(solutionData.updateTime * 1000) }} ,
                     &nbsp;阅读&nbsp;{{ solutionData.read }}
                 </div>
             </template>
@@ -90,8 +90,8 @@
                                 </div>
                                 <div class='comment-content' v-html="DOMPurify.sanitize(markdown(comment.content))"></div>
                                 <div class='comment-info'>
-                                    <span :title='time.formatDate(comment.createTime)' class='comment-time'>
-                                        {{ dateStr(comment.createTime) }}
+                                    <span :title='time.formatDate(comment.createTime * 1000)' class='comment-time'>
+                                        {{ dateStr(comment.createTime * 1000) }}
                                     </span>
                                     <a :id="'comment-btn-' + comment.commentId" class='reply-btn'
                                         :ref="getReplyBtnRef(comment.commentId)" style="cursor: pointer"
@@ -128,8 +128,8 @@
                                         <div class='reply-content' v-html='DOMPurify.sanitize(markdown(reply.content))'>
                                         </div>
                                         <div class='reply-info'>
-                                            <span :title='time.formatDate(reply.createTime)' class='reply-time'>
-                                                {{ dateStr(reply.createTime) }}
+                                            <span :title='time.formatDate(reply.createTime * 1000)' class='reply-time'>
+                                                {{ dateStr(reply.createTime * 1000) }}
                                             </span>
                                             <span v-if='reply.toCommentId !== reply.rootCommentId' class='reply-btn'>回复了
                                                 <a :id="'reply-link-' + reply.commentId"
@@ -315,9 +315,11 @@ const showReplyInput = (i: number, j: number, commentId: number) => {
         comments.value[i].reply[j].inputShow = !comments.value[i].reply[j].inputShow;
     }
 
+    //@ts-ignore
     let text = replyBtnRefs.value["reply-btn-" + commentId][0].innerText;
     console.log(text);
     text = text === '回复' ? '收起' : '回复';
+    //@ts-ignore
     replyBtnRefs.value['reply-btn-' + commentId][0].innerText = text;
 }
 
@@ -408,7 +410,7 @@ const sendCommentReply = async(i: number, j: number, reply: Comment) => {
         })
         return;
     }
-
+    //@ts-ignore
     let replyComment = DOMPurify.sanitize(markdown(replyInputContentRefs.value['reply-input-content-' + reply.commentId][0].value)) ;
     if (!replyComment) {
         ElMessage({
@@ -461,7 +463,9 @@ const sendCommentReply = async(i: number, j: number, reply: Comment) => {
             comments.value[i].reply.push(comment);
             //隐藏当前的输入框
             reply.inputShow = false;
+            //@ts-ignore
             replyBtnRefs.value['reply-btn-' + reply.commentId][0].innerText = '回复';
+            //@ts-ignore
             replyInputContentRefs.value['reply-input-content-' + reply.commentId][0].value = '';
             return;
         } 
@@ -477,17 +481,19 @@ const sendCommentReply = async(i: number, j: number, reply: Comment) => {
 
 
 const showReplyByAnimation = (reply: Comment) => {
-    replyRefs.value['reply-' + reply.toCommentId][0].setAttribute('class', 'author-title animate__animated ' +
+    //@ts-ignore
+    replyRefs.value['reply-' + reply.toCommentId][0].setAttribute('class', 'comment-item animate__animated ' +
         'animate__flash animate__faster animate__infinite');
     sleep(1000).then(() => {
-        replyRefs.value['reply-' + reply.toCommentId][0].setAttribute('class', 'author-title');
+        //@ts-ignore
+        replyRefs.value['reply-' + reply.toCommentId][0].setAttribute('class', 'comment-item');
     });
 }
 
 const dateStr = (date: number) => {
     //获取js 时间戳
     let timestamp = new Date().getTime();
-    //去掉 js 时间戳后三位，与php 时间戳保持一致
+    //去掉 js 时间戳后三位，与后端时间戳保持一致
     timestamp = (timestamp - date) / 1000;
     //存储转换值
     let s;
@@ -676,7 +682,7 @@ onMounted(() => {
     text-align: center;
     font-size: 16px;
     color: #000000;
-    margin: 20px 0 0 -14px;
+    margin: 20px 0 0 -40px;
 }
 
 .comment-card {

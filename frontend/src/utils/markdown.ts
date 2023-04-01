@@ -1,19 +1,20 @@
 import * as marked from 'marked';
 import katex from 'katex';
+import 'katex/dist/katex.css';
 import highlight from 'highlight.js';
 import 'highlight.js/styles/foundation.css'
 
 const renderer = new marked.Renderer();
 
 function toHtml(text: string) {
-  let temp = <HTMLDivElement| null>document.createElement('div');
+  let temp = <HTMLDivElement | null>document.createElement('div');
   temp!.innerHTML = text;
   let output = temp!.innerText || temp!.textContent;
   temp = null;
   return output;
 }
 
-function mathsExpression(expr: string| null) {
+function mathsExpression(expr: string | null) {
   if (expr!.match(/^\$\$[\s\S]*\$\$$/)) {
     expr = expr!.substring(2, expr!.length - 2);
     return katex.renderToString(expr, { displayMode: true });
