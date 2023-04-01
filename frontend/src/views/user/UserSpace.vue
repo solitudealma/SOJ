@@ -1,8 +1,8 @@
 <template>
     <el-row>
-        <el-col :span='6'>
+        <el-col :span='5'>
             <el-card :body-style="{ padding: '15px' }">
-                <el-avatar id='my-head-photo' class='img-responsive center-block' :src=userInfo.avatar :size='250'
+                <el-avatar id='my-head-photo' class='img-responsive center-block' :src=userInfo.avatar :size='200'
                     shape='square' alt='我的头像'>
                 </el-avatar>
                 <hr>
@@ -14,12 +14,12 @@
                 <hr>
             </el-card>
         </el-col>
-        <el-col :span='17' :push='1'>
+        <el-col :span='18' :push='1'>
             <el-tabs type='border-card' v-model='activeName' @tab-click='handleClick'>
                 <el-tab-pane name='solution' label='题解'>
                     <div class='table'>
                         <el-table :data='solutionList' max-height='800px' stripe highlight-current-row>
-                            <el-table-column prop='problemId' label='#' width='60'>
+                            <el-table-column prop='problemId' label='#' width='80'>
                             </el-table-column>
                             <el-table-column prop='title' label='标题' width='350'>
                                 <template #default="scope">
@@ -44,12 +44,12 @@
                                     </el-tag>
                                 </template>
                             </el-table-column>
-                            <el-table-column prop='updateTime' label='时间' width='145'>
+                            <el-table-column prop='updateTime' label='时间' width='170'>
                                 <template #default="scope">
-                                    {{ time.formatDate(scope.row.updateTime) }}
+                                    {{ time.formatDate(scope.row.updateTime * 1000) }}
                                 </template>
                             </el-table-column>
-                            <el-table-column prop='read' label='阅读' width='60'>
+                            <el-table-column prop='read' label='阅读' width='80'>
                             </el-table-column>
                             <el-table-column prop='problemSource' label='题目来源'>
                             </el-table-column>
