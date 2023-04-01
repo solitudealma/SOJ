@@ -35,7 +35,16 @@
 <script setup lang="ts">
 import { computed, ref } from "vue";
 let listVisible = ref(true);
-let announcementList = ref([
+
+interface Announcement {
+  title: string;
+  content: string;
+  link: string;
+  date: string;
+  creator: string;
+}
+
+let announcementList = ref<Array<Announcement>>([
   {
     title: "各位超级管理员请勿随便修改本站配置",
     date: "2021-8-28 19:54:38",
@@ -58,25 +67,33 @@ let announcementList = ref([
     content: "<p>asds</p>",
   },
 ]);
-let announcement = ref({
-  title: "",
-});
+let announcement = ref<Announcement>({
+    title: "",
+    content: "",
+    date: "",
+    link: "",
+    creator: "",
+  });
 let announcementTitle = computed(() => {
   let title = "Announcement";
   if (listVisible.value) {
     return title;
   } else {
-    return announcement.value.title;
+    return announcement.value!.title;
   }
 });
 
 const goBack = () => {
   listVisible.value = true;
-  announcement.value = {
+  announcement.value = <Announcement>{
     title: "",
+    content: "",
+    date: "",
+    creator: "",
   };
 };
-const goAnnouncement = (val) => {
+
+const goAnnouncement = (val: Announcement) => {
   announcement.value = val;
   listVisible.value = false;
 };
