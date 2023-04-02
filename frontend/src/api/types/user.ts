@@ -1,4 +1,4 @@
-export interface UserInfo {
+export interface GetUserInfo {
     userId: number;
     username: string;
     avatar: string;
@@ -11,7 +11,7 @@ export interface LoginRequest {
 
 export interface LoginReponse {
     token: string;
-    userInfo: UserInfo;
+    userInfo: GetUserInfo;
 }
 
 export interface RegisterRequest {
@@ -29,5 +29,13 @@ export interface GetUserInfoRequest {
 }
 
 export interface GetUserInfoResponse {
-    userInfo: UserInfo;
+    userInfo: GetUserInfo;
+}
+
+export interface UpdateUserInfoRequest {
+    username: string;
+}
+
+export interface UpdateUserInfoResponse {
+
 }

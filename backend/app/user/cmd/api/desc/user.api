@@ -43,4 +43,8 @@ service user {
 	@doc "get user info"
 	@handler getUserInfo
 	get /user/info (GetUserInfoReq) returns (GetUserInfoResp)
+	
+	@doc "update user info"
+	@handler updateUserInfo
+	post /user/info (UpdateUserInfoReq) returns (UpdateUserInfoResp)
 }

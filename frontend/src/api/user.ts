@@ -1,6 +1,9 @@
 import service from '@/utils/request'
 import { ResponseInterface } from './types'
-import { LoginRequest, LoginReponse, RegisterRequest, RegisterResponse, GetUserInfoResponse } from './types/user'
+import {
+    LoginRequest, LoginReponse, RegisterRequest, RegisterResponse, GetUserInfoResponse,
+    UpdateUserInfoRequest, UpdateUserInfoResponse
+} from './types/user'
 
 // @Summary 用户登录
 // @Produce  application/json
@@ -47,5 +50,17 @@ export const getUserInfo = (): Promise<ResponseInterface<GetUserInfoResponse>> =
         url: '/user/info',
         method: 'get',
         data: {},
+    })
+}
+
+// @Summary 更新用户信息
+// @Produce  application/json
+// @Param data body {}
+// @Router /user/info [post]
+export const updateUserInfo = (data: UpdateUserInfoRequest): Promise<ResponseInterface<UpdateUserInfoResponse>> => {
+    return service({
+        url: '/user/info',
+        method: 'post',
+        data: data,
     })
 }

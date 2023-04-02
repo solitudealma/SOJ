@@ -57,10 +57,6 @@
           <el-dropdown-menu class="dropdown-menu">
             <el-dropdown-item command="mySpace">我的空间</el-dropdown-item>
             <el-dropdown-item command="userInfo">个人信息</el-dropdown-item>
-            <el-dropdown-item command="changePassword">修改密码
-            </el-dropdown-item>
-            <el-dropdown-item :divided="true" command="myTicket">我的工单
-            </el-dropdown-item>
             <el-dropdown-item :divided="true" command="logout">登出
             </el-dropdown-item>
           </el-dropdown-menu>
@@ -119,13 +115,22 @@ const handleBtnClick = (mode: string) => {
 };
 
 const handleCommand = (route: RouteLocationRaw) => {
-  switch(route) {
+  switch (route) {
     case 'mySpace':
       router.push({
         name: 'UserSpace',
         params: { userId: userInfo.value.userId },
       });
       break;
+    case 'userInfo':
+      router.push({
+        name: 'UserProfile',
+      });
+      break;
+    case 'logout':
+      router.push({
+        name: 'Logout',
+      });
     default:
       break;
   }
@@ -152,16 +157,20 @@ watch(
   float: left;
   line-height: 60px;
 }
+
 .btn-menu {
   float: right;
   margin-right: 20px;
   margin-top: 10px;
 }
+
 .header-img {
   margin: 10px 0 -13px 0;
 }
+
 .drop-menu {
   margin-top: 24px;
+
   .dropdown-menu {
     left: 0;
     float: left;
@@ -174,13 +183,16 @@ watch(
     border-radius: 4px;
   }
 }
+
 .flex-grow {
   flex-grow: 1;
 }
+
 .el-popover {
   .btn-menu-icon-trophy {
     margin: 0 0 0 70px;
   }
+
   .login-btn {
     display: block;
     box-sizing: border-box;
@@ -195,6 +207,7 @@ watch(
     border-radius: 2px;
     cursor: pointer;
   }
+
   .register-btn {
     color: #00a1d6;
     position: relative;
@@ -202,17 +215,21 @@ watch(
     cursor: pointer; //鼠标手型
   }
 }
+
 #id_user_username {
   cursor: pointer;
   color: #909399;
 }
+
 #id_user_username:hover {
   color: #303133;
 }
+
 :deep(.el-dialog) {
   border-radius: 10px !important;
   text-align: center;
 }
+
 :deep(.el-dialog__header .el-dialog__title) {
   font-size: 22px;
   font-weight: 600;

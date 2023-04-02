@@ -38,7 +38,6 @@ func (l *LogoutLogic) Logout(req *types.LogoutReq) (resp *types.LogoutResp, err 
 
 	if err != nil {
 		return nil, errors.Wrapf(xerr.NewErrMsg("该用户信息不存在"), "注销登录失败")
-
 	}
 
 	cacheKey := globalkey.CacheUserTokenKey + user.Username

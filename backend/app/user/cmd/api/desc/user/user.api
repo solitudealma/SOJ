@@ -50,3 +50,11 @@ type (
 		UserInfo UserInfo `json:"userInfo"`
 	}
 )
+
+type (
+	UpdateUserInfoReq {
+		Username	string	`json:"username" validate:"required"`
+	}
+	UpdateUserInfoResp {
+	}
+)

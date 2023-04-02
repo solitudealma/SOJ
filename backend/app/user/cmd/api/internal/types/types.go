@@ -40,3 +40,10 @@ type GetUserInfoReq struct {
 type GetUserInfoResp struct {
 	UserInfo UserInfo `json:"userInfo"`
 }
+
+type UpdateUserInfoReq struct {
+	Username string `json:"username" validate:"required"`
+}
+
+type UpdateUserInfoResp struct {
+}
